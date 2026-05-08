@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca - Kuromi Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="perfil-usuario">
+                <div class="avatar-placeholder"></div>
+                <h2>Olá, Lara! <button id="toggle-dark" class="btn-tema">🌙</button></h2>
+            </div>
+            <nav class="menu-navegacao">
+                <ul>
+                    <li onclick="window.location.href='index.html'">Tarefas e Prazos</li>
+                    <li onclick="window.location.href='disciplinas.html'">Disciplinas</li>
+                    <li onclick="window.location.href='biblioteca.html'" style="background-color: var(--roxo-kuromi-suave);">Biblioteca (Leituras)</li>
+                    <li id="menu-arquivo">Arquivo Concluído</li>
+                </ul>
+            </nav>
+
+            <div class="configuracoes-sidebar">
+                <hr style="opacity: 0.2; margin: 20px 0;">
+                <div class="perfil-seletor">
+                    <label style="font-size: 0.7rem; opacity: 0.7;">Perfil Atual:</label>
+                    <select id="select-perfil-global">
+                        <option value="Lara">Lara 💜</option>
+                        <option value="Convidado">Convidado ✨</option>
+                    </select>
+                </div>
+                
+                <div class="botoes-backup">
+                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
+                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
+                    <input type="file" id="input-importar" style="display: none;" accept=".json">
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo-principal caixa-com-adesivo">
+            
+            <img src="imgs/Kuromi-rightPeek.png" class="adesivo" style="top: 600px; left: 789px; width: 80px;">
+
+            <header class="cabecalho-principal">
+                <div class="titulo-com-botao">
+                    <div>
+                        <h1>Sua Biblioteca 📖</h1>
+                        <p>Controle os seus PDFs, artigos e livros.</p>
+                    </div>
+                    <button id="btn-nova-leitura" class="botao-icon" title="Adicionar Leitura">+</button>
+                </div>
+            </header>
+
+            <section class="grid-leituras" id="container-leituras">
+                </section>
+        </main>
+
+        <aside class="painel-widgets">
+            <div class="widget caixa-com-adesivo">
+                <h3>Meta de Leitura</h3>
+                <div id="display-paginas-lidas" style="font-size: 2.5rem; font-weight: bold; text-align: center; color: var(--roxo-kuromi-escuro); margin-top: 10px;">0</div>
+                <p style="text-align: center; font-size: 0.8rem; opacity: 0.7;">Páginas lidas este semestre</p>
+            </div>
+            <div class="widget">
+                <h3>Leitura Atual</h3>
+                <div id="display-leitura-atual" style="margin-top: 10px; font-size: 0.9rem; text-align: center;">
+                    <p>Nenhum livro em andamento no momento. 💜</p>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <div id="modal-nova-leitura" class="modal-overlay oculto">
+        <div class="modal-conteudo caixa-com-adesivo">
+            <img src="imgs/Kuromi-top2.png" class="adesivo" style="top: -44px; right: 20px; width: 70px;">
+            
+            <h2>Nova Leitura 📚</h2>
+            <form id="form-leitura">
+                <div class="grupo-input">
+                    <label for="select-materia-leitura">Disciplina</label>
+                    <select id="select-materia-leitura" required>
+                        <option value="" disabled selected>Escolha a disciplina...</option>
+                        </select>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-titulo-leitura">Título do Texto / Livro</label>
+                    <input type="text" id="input-titulo-leitura" placeholder="A Vida Invisível de Addie LaRue" required>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-autor">Autor (Opcional)</label>
+                    <input type="text" id="input-autor" placeholder="V. E. Schwab">
+                </div>
+                
+                <div class="grupo-input">
+                    <label>Páginas (Lidas / Total)</label>
+                    <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
+                        <input type="number" id="input-paginas-lidas" value="0" min="0" required style="flex: 1; min-width: 0; text-align: center;" title="Páginas Lidas">
+                        
+                        <span style="font-size: 1.5rem; font-weight: bold; color: var(--roxo-kuromi-suave);">/</span>
+                        
+                        <input type="number" id="input-paginas-total" min="1" placeholder="Total" required style="flex: 1; min-width: 0; text-align: center;" title="Total de Páginas">
+                    </div>
+                </div>
+
+                <div class="botoes-modal">
+                    <button type="button" id="btn-cancelar-leitura" class="botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao-primario">Salvar 💜</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="biblioteca.js"></script>
+</body>
+</html>

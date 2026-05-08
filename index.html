@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Acadêmico - Kuromi Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- Menu Lateral Rápido -->
+        <aside class="sidebar">
+            <div class="perfil-usuario">
+                <div class="avatar-placeholder"></div>
+                <h2>Olá, Lara! <button id="toggle-dark" class="btn-tema">🌙</button></h2>
+            </div>
+
+            <nav class="menu-navegacao">
+                <ul>
+                    <li onclick="window.location.href='index.html'" style="background-color: var(--roxo-kuromi-suave);">Tarefas e Prazos</li>
+                    <li onclick="window.location.href='disciplinas.html'">Disciplinas</li>
+                    <li onclick="window.location.href='biblioteca.html'">Biblioteca (Leituras)</li>
+                    <li id="menu-arquivo">Tarefas Concluídas</li>
+                </ul>
+            </nav>
+
+            <div class="configuracoes-sidebar">
+                <hr style="opacity: 0.2; margin: 20px 0;">
+                <div class="perfil-seletor">
+                    <label style="font-size: 0.7rem; opacity: 0.7;">Perfil Atual:</label>
+                    <select id="select-perfil-global">
+                        <option value="Lara">Lara 💜</option>
+                        <option value="Convidado">Convidado ✨</option>
+                    </select>
+                </div>
+                
+                <div class="botoes-backup">
+                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
+                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
+                    <input type="file" id="input-importar" style="display: none;" accept=".json">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Visão Geral Tudo em Um -->
+        <main class="conteudo-principal">
+            <header class="cabecalho-principal">
+                <div class="titulo-com-botao">
+                    <div>
+                        <h1>Visão Geral <span id="texto-visao">do Dia</span> 💜</h1>
+                        <p>Organize suas tarefas com a Kuromi</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="seletor-visualizacao">
+                            <button class="btn-view ativo" data-view="dia">Dia</button>
+                            <button class="btn-view" data-view="semana">Semana</button>
+                            <button class="btn-view" data-view="todas">Todas</button>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button id="btn-ordenar" class="botao-icon" title="Ordenar por Urgência">⇅</button>
+                            <button id="btn-abrir-modal" class="botao-icon" title="Nova Tarefa">+</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="container-tarefas"></section>
+        </main>
+
+        <!-- Widgets de Progresso e Autocuidado -->
+        <aside class="painel-widgets">
+            <div class="widget" id="widget-progresso">
+                <h3>Progresso do Semestre</h3>
+                <div class="container-grafico">
+                    <div class="grafico-rosca" id="grafico-progresso">
+                        <div class="miolo-grafico">
+                            <span id="porcentagem-texto">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <p id="legenda-progresso" style="text-align: center; font-size: 0.8rem; opacity: 0.7; margin-top: 10px;">
+                    0 de 0 tarefas concluídas
+                </p>
+            </div>
+
+            <div class="widget pomodoro caixa-com-adesivo">
+                <img src="imgs/Kuromi-top2.png" class="adesivo" style="top: -30px; right: -10px; width: 55px;">
+                
+                <div class="info-titulo" style="justify-content: center; margin-bottom: 10px;">
+                    <h3>Foco Kuromi 🍅</h3>
+                </div>
+                
+                <div class="timer" id="display-pomodoro">25:00</div>
+                
+                <div class="controles-pomodoro">
+                    <button id="btn-pomodoro-play" class="btn-pomodoro">▶️ Play</button>
+                    <button id="btn-pomodoro-pause" class="btn-pomodoro oculto">⏸️ Pause</button>
+                    <button id="btn-pomodoro-reset" class="btn-pomodoro">🔄 Reset</button>
+                    <button id="btn-zen" class="btn-pomodoro">🧘 Modo Foco</button>
+                </div>
+            </div>
+
+            <div class="widget autocuidado caixa-com-adesivo" id="widget-lembretes">
+                <div class="info-titulo">
+                    <h3>Lembretes</h3>
+                    <button id="btn-novo-lembrete" class="btn-adicionar-falta">+</button>
+                </div>
+                <div id="lista-lembretes-container" style="margin-top: 15px;">
+                    </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <div id="modal-novo-lembrete" class="modal-overlay oculto">
+        <div class="modal-conteudo caixa-com-adesivo">
+            <img src="imgs/Kuromi_walking.png" class="adesivo" style="top: -50px; left: 10px; width: 60px;">
+            <h2>Novo Lembrete ✨</h2>
+            <form id="form-lembrete">
+                <div class="grupo-input">
+                    <label for="input-texto-lembrete">O que você não pode esquecer?</label>
+                    <input type="text" id="input-texto-lembrete" placeholder="Ex: Levar a Juliette para passear" required>
+                </div>
+                <div class="botoes-modal">
+                    <button type="button" id="btn-cancelar-lembrete" class="botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao-primario">Adicionar 💜</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="modal-nova-tarefa" class="modal-overlay oculto">
+        <div class="modal-conteudo caixa-com-adesivo">
+            
+            <img src="imgs/Kuromi-rightPeek.png" class="adesivo" 
+                style="top: 100px; right: -82px; width: 80px;">
+                
+            <img src="imgs/Kuromi-top2.png" class="adesivo" 
+                style="top: -60px; left: 100px; width: 90px;">
+                
+            <img src="imgs/Kuromi_walking.png" class="adesivo" 
+                style="bottom: -20px; right: 370px; width: 60px; transform: rotate(-15deg);">
+
+            <h2>Nova Tarefa</h2>
+            <form id="form-tarefa">
+                <div class="grupo-input">
+                    <label for="select-materia">Matéria</label>
+                    <select id="select-materia" required>
+                        <option value="" disabled selected>Escolha a disciplina...</option>
+                        </select>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-titulo">Título / Detalhe</label>
+                    <input type="text" id="input-titulo" placeholder="Ex: P1, T1, etc" required>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-data">Prazo ou Data</label>
+                    <input type="date" id="input-data" required>
+                </div>
+                <div class="botoes-modal">
+                    <button type="button" id="btn-cancelar-modal" class="botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao-primario">Salvar 💜</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

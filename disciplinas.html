@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disciplinas - Kuromi Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="perfil-usuario">
+                <div class="avatar-placeholder"></div>
+                <h2>Olá, Lara! <button id="toggle-dark" class="btn-tema">🌙</button></h2>
+            </div>
+            <nav class="menu-navegacao">
+                <ul>
+                    <li onclick="window.location.href='index.html'">Tarefas e Prazos</li>
+                    <li onclick="window.location.href='disciplinas.html'" style="background-color: var(--roxo-kuromi-suave);">Disciplinas</li>
+                    <li onclick="window.location.href='biblioteca.html'">Biblioteca (Leituras)</li>
+                    <li id="menu-arquivo">Arquivo Concluído</li>
+                </ul>
+            </nav>
+
+            <div class="configuracoes-sidebar">
+                <hr style="opacity: 0.2; margin: 20px 0;">
+                <div class="perfil-seletor">
+                    <label style="font-size: 0.7rem; opacity: 0.7;">Perfil Atual:</label>
+                    <select id="select-perfil-global">
+                        <option value="Lara">Lara 💜</option>
+                        <option value="Convidado">Convidado ✨</option>
+                    </select>
+                </div>
+                
+                <div class="botoes-backup">
+                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
+                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
+                    <input type="file" id="input-importar" style="display: none;" accept=".json">
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo-principal caixa-com-adesivo">
+            
+            <img src="imgs/Kuromi-top2.png" class="adesivo" style="top: -44px; right: 20px; width: 70px;">
+
+            <header class="cabecalho-principal">
+                <div class="titulo-com-botao">
+                    <div>
+                        <h1>Suas Disciplinas 📚</h1>
+                        <p>Controle suas notas e presenças sem estresse.</p>
+                    </div>
+                    <button id="btn-nova-disciplina" class="botao-icon" title="Adicionar Matéria">+</button>
+                </div>
+            </header>
+
+            <section class="grid-disciplinas">
+                <div class="card-disciplina">
+                    <div class="disciplina-header">
+                        <h2>Matemática Avançada</h2>
+                        <button class="botao-secundario-pequeno">Editar</button>
+                    </div>
+                    
+                    <div class="disciplina-corpo">
+                        <div class="bloco-info">
+                            <div class="info-titulo">
+                                <span>Faltas (3/10)</span>
+                                <button class="btn-adicionar-falta" title="Adicionar Falta">+</button>
+                            </div>
+                            <div class="trilha-faltas">
+                                <div class="falta-marcada"></div>
+                                <div class="falta-marcada"></div>
+                                <div class="falta-marcada"></div>
+                                <div class="falta-vazia"></div>
+                                <div class="falta-vazia"></div>
+                                <div class="falta-vazia"></div>
+                                <div class="falta-vazia"></div>
+                                <div class="falta-vazia"></div>
+                                <div class="falta-vazia"></div>
+                                <div class="falta-vazia"></div>
+                            </div>
+                        </div>
+
+                        <div class="bloco-info">
+                            <div class="info-titulo">
+                                <span>Média Atual</span>
+                            </div>
+                            <div class="display-nota">
+                                <span class="nota-valor">7.5</span>
+                                <span class="nota-meta">Meta: 7.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="painel-widgets">
+            <div class="widget caixa-com-adesivo">
+                <h3>Média Global (CRA)</h3>
+                <div id="display-cra" style="font-size: 3rem; font-weight: bold; text-align: center; color: var(--roxo-kuromi-escuro); margin-top: 10px;">--</div>
+            </div>
+            <div class="widget">
+                <h3>Risco de Reprovação</h3>
+                <div id="display-risco" style="margin-top: 10px; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px;">
+                    <p>Tudo seguro por enquanto! 💜</p>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <div id="modal-nova-disciplina" class="modal-overlay oculto">
+        <div class="modal-conteudo caixa-com-adesivo">
+            
+            <img src="imgs/Kuromi-top2.png" class="adesivo" style="top: -50px; right: 0px; width: 80px;">
+
+            <h2>Nova Disciplina 📚</h2>
+            <form id="form-disciplina">
+                <div class="grupo-input">
+                    <label for="input-nome-materia">Nome da Matéria</label>
+                    <input type="text" id="input-nome-materia" placeholder="Ex: Teoria da Comunicação" required>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-limite-faltas">Limite de Faltas (em dias)</label>
+                    <input type="number" id="input-limite-faltas" placeholder="10" min="1" required>
+                    <small style="font-size: 0.75rem; opacity: 0.7; margin-top: 4px;">geralmente 30% da carga horária.</small>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-faltas-cometidas">Faltas Marcadas</label>
+                    <input type="number" id="input-faltas-cometidas" value="0" min="0" required>
+                    <small style="font-size: 0.75rem; opacity: 0.7; margin-top: 4px;"></small>
+                </div>
+                <div class="grupo-input">
+                    <label for="input-meta-nota">Meta de Nota (Média)</label>
+                    <input type="number" id="input-meta-nota" placeholder="5.0" step="0.1" min="0" max="10" required>
+                </div>
+                <div class="botoes-modal">
+                    <button type="button" id="btn-cancelar-disciplina" class="botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao-primario">Salvar 💜</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-nova-nota" class="modal-overlay oculto">
+        <div class="modal-conteudo caixa-com-adesivo">
+            <img src="imgs/Kuromi-rightPeek.png" class="adesivo" style="top: 30px; right: -72px; width: 70px;">
+            
+            <h2>Registrar Nota 📝</h2>
+            <form id="form-nota">
+                <div class="grupo-input">
+                    <label for="input-titulo-nota">Título da Avaliação</label>
+                    <input type="text" id="input-titulo-nota" placeholder="Ex: P1, Seminário..." required>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="grupo-input" style="flex: 1;">
+                        <label for="input-valor-nota">Nota</label>
+                        <input type="number" id="input-valor-nota" placeholder="0.0 a 10" step="0.1" min="0" max="10" required>
+                    </div>
+                    <div class="grupo-input" style="flex: 1;">
+                        <label for="input-peso-nota">Peso</label>
+                        <input type="number" id="input-peso-nota" value="1" step="0.1" min="0.1" required>
+                        <small style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;">Deixe 1 para média simples.</small>
+                    </div>
+                </div>
+                <div class="botoes-modal">
+                    <button type="button" id="btn-cancelar-nota" class="botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao-primario">Salvar 💜</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="disciplinas.js"></script>
+</body>
+</html>

@@ -1,0 +1,1123 @@
+/* Definindo a paleta de cores "Kuromi Cozy" */
+:root {
+    --fundo-principal: #F8F5FA; 
+    --roxo-kuromi-suave: #D5C6E0; 
+    --roxo-kuromi-escuro: #4A3B52; 
+    --rosa-melody: #FAD4D8; 
+    --branco-puro: #FFFFFF;
+    --sombra-suave: 0 8px 24px rgba(74, 59, 82, 0.08); 
+    --borda-arredondada: 24px;
+}
+
+/* Reset básico para manter a consistência */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    color: var(--roxo-kuromi-escuro);
+}
+
+/* 1. Fundo geral com a imagem */
+body {
+    background-image: url('imgs/fundo.jpg');
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    cursor: url('imgs/cursor_kuromi.png'), auto;
+}
+
+/* Cursores Personalizados */
+a, button, .menu-navegacao li {
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+}
+
+
+/* 2. Efeito Glassmorphism (Vidro Fosco) nas caixas principais */
+.sidebar, .conteudo-principal, .widget {
+    background-color: rgba(255, 255, 255, 0.55); 
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5); 
+    border-radius: var(--borda-arredondada);
+    box-shadow: var(--sombra-suave);
+    padding: 30px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s ease, 
+                background-color 0.3s ease;
+}
+
+/* 3. A Animação de Hover (Sutil e Satisfatória) */
+.sidebar:hover, .conteudo-principal:hover, .widget:hover {
+    transform: translateY(-4px) scale(1.01); 
+    box-shadow: 0 12px 28px rgba(74, 59, 82, 0.15); 
+    background-color: rgba(255, 255, 255, 0.75); 
+}
+
+/* O Layout em Grid principal do Dashboard */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 250px 1fr 300px; 
+    gap: 30px;
+    width: 100%;
+    max-width: 1400px;
+    height: 90vh; 
+}
+
+/* Estilizando o Menu Lateral */
+.perfil-usuario {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    background-color: var(--roxo-kuromi-suave);
+    border-radius: 50%;
+    margin: 0 auto 15px;
+}
+
+.menu-navegacao ul {
+    list-style: none;
+}
+
+.menu-navegacao li {
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: var(--fundo-principal);
+    border-radius: 12px;
+    /* A propriedade cursor: pointer; foi removida daqui para não conflitar */
+    transition: all 0.3s ease; 
+}
+
+.menu-navegacao li:hover {
+    background-color: var(--roxo-kuromi-suave);
+    transform: translateX(5px); 
+}
+
+/* Estilizando a Área Principal */
+.cabecalho-principal {
+    margin-bottom: 30px;
+}
+
+.grid-tarefas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card-tarefa {
+    background-color: var(--roxo-kuromi-suave);
+    padding: 20px;
+    border-radius: 16px;
+    font-weight: bold;
+    cursor: url('imgs/grab.png') 16 16, grab; 
+}
+
+/* Cor para tarefas Pessoais / Outros */
+.card-tarefa.pessoal {
+    background-color: var(--rosa-melody);
+    border-color: rgba(74, 59, 82, 0.1); /* Uma borda subtil para dar acabamento */
+}
+
+/* Ajuste do Badge (etiqueta) para tarefas pessoais */
+.card-tarefa.pessoal .disciplina-badge {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: var(--roxo-kuromi-escuro);
+}
+
+.card-tarefa:active {
+    cursor: url('imgs/grabbing.png') 16 16, grabbing;
+}
+
+/* Estilizando os Widgets */
+.painel-widgets {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: transparent; 
+    box-shadow: none;
+    padding: 0;
+}
+
+.widget.pomodoro .timer {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--roxo-kuromi-escuro);
+    margin-top: 10px;
+}
+
+/* Estilo do Cabeçalho com o botão de + */
+.titulo-com-botao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.botao-icon {
+    background-color: var(--roxo-kuromi-suave);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: var(--roxo-kuromi-escuro);
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.botao-icon:hover {
+    transform: scale(1.1);
+    background-color: var(--rosa-melody);
+}
+
+/* O fundo escuro que cobre a tela (Overlay) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(74, 59, 82, 0.4); /* Fundo roxo escuro transparente */
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que fique acima de tudo */
+    transition: opacity 0.3s ease;
+}
+
+/* Classe para esconder o modal */
+.modal-overlay.oculto {
+    opacity: 0;
+    pointer-events: none; /* Impede cliques quando invisível */
+}
+
+/* A janela flutuante em si */
+.modal-conteudo {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 3px solid var(--roxo-kuromi-escuro);
+    padding: 30px;
+    border-radius: var(--borda-arredondada);
+    box-shadow: var(--sombra-suave);
+    width: 90%;
+    max-width: 400px;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    position: relative; /* Necessário para os adesivos */
+    overflow: visible;
+}
+
+/* Classe Mestra para Colagens/Adesivos em qualquer lugar do site */
+.adesivo {
+    position: absolute;
+    pointer-events: none; /* Crucial: garante que o adesivo não bloqueie cliques do mouse nos botões abaixo dele */
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+    z-index: 10; /* Garante que fique por cima da caixa */
+}
+
+/* Regra de Ouro para as Caixas Base */
+/* Qualquer caixa que for receber um adesivo PRECISA ter essas duas propriedades: */
+.caixa-com-adesivo {
+    position: relative;
+    overflow: visible !important;
+}
+
+.modal-overlay.oculto .modal-conteudo {
+    transform: translateY(20px); /* Animação de entrada vindo de baixo */
+}
+
+/* Estilização do Formulário */
+.grupo-input {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.grupo-input label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.grupo-input input {
+    padding: 12px;
+    border: 2px solid var(--roxo-kuromi-suave);
+    border-radius: 12px;
+    background-color: var(--branco-puro);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.grupo-input input:focus {
+    border-color: var(--roxo-kuromi-escuro);
+}
+
+#input-data {
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+}
+
+label {
+    cursor: url('imgs/cursor_kuromi.png'), auto;
+}
+
+/* Botões do Modal */
+.botoes-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.botao-primario, .botao-secundario {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: opacity 0.2s ease;
+}
+
+.botao-primario {
+    background-color: var(--roxo-kuromi-escuro);
+    color: var(--branco-puro);
+}
+
+.botao-secundario {
+    background-color: transparent;
+    border: 2px solid var(--roxo-kuromi-suave);
+}
+
+
+
+.botao-primario:hover, .botao-secundario:hover {
+    opacity: 0.8;
+}
+
+/* Checkbox de Conclusão Customizado */
+.checkbox-concluir {
+    appearance: none; /* Remove o visual padrão do navegador */
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--roxo-kuromi-escuro);
+    border-radius: 50%;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: all 0.2s ease;
+    display: grid;
+    place-items: center;
+    margin-right: 10px;
+}
+
+.checkbox-concluir::before {
+    content: "💜";
+    font-size: 12px;
+    transform: scale(0);
+    transition: 0.2s transform ease-in-out;
+}
+
+.checkbox-concluir:checked::before {
+    transform: scale(1);
+}
+
+.checkbox-concluir:checked {
+    border-color: var(--roxo-kuromi-suave);
+    background-color: var(--rosa-melody);
+}
+
+/* Estado de Tarefa Concluída */
+.card-tarefa.concluida {
+    opacity: 0.5;
+    background-color: transparent;
+    border: 2px dashed var(--roxo-kuromi-suave);
+    box-shadow: none;
+}
+
+.card-tarefa.concluida .texto-detalhe {
+    text-decoration: line-through;
+    color: var(--roxo-kuromi-suave);
+}
+
+/* Efeitos de Drag and Drop (Arrastar) */
+.card-tarefa.dragging {
+    opacity: 0.4;
+    transform: scale(0.95) rotate(-2deg);
+    animation: tremor 0.2s infinite; /* Trema enquanto arrasta */
+    cursor: url('imgs/grabbing.png') 0 0, grabbing;
+    box-shadow: 0 15px 30px rgba(74, 59, 82, 0.2);
+}
+
+.card-tarefa.drag-over {
+    border: 2px dashed var(--roxo-kuromi-escuro);
+    transform: translateY(4px);
+}
+
+/* Animação de tremor para o card segurado */
+@keyframes tremor {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(1deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-1deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Partícula de Purpurina */
+.particula {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 2000;
+    animation: puff 0.8s ease-out forwards;
+}
+
+@keyframes puff {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(3) translate(var(--x), var(--y)); opacity: 0; }
+}
+
+/* Força a patinha fechada globalmente durante o arrasto */
+body.arrastando-ativo, 
+body.arrastando-ativo * {
+    cursor: url('imgs/grabbing.png') 16 16, grabbing !important;
+}
+
+/* O visual do card que está "flutuando" sendo arrastado */
+.sortable-drag {
+    opacity: 1 !important;
+    transform: scale(1.05) rotate(-2deg);
+    box-shadow: 0 20px 40px rgba(74, 59, 82, 0.2) !important;
+    cursor: url('imgs/grabbing.png') 16 16, grabbing !important;
+    transition: none !important; /* ADICIONADO: Força o CSS a não interferir no JavaScript */
+}
+
+/* O "buraco" ou espaço vazio onde o card vai encaixar (efeito ímã) */
+.sortable-ghost {
+    opacity: 0.3;
+    background-color: var(--roxo-kuromi-suave);
+    border: 2px dashed var(--roxo-kuromi-escuro);
+}
+
+/* Animação em cascata para organizar por urgência */
+@keyframes popInCascade {
+    0% { opacity: 0; transform: translateY(15px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card-animado {
+    animation: popInCascade 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    opacity: 0; /* Começa invisível até a animação ditar o tempo */
+}
+
+/* Efeito visual de atração na Lixeira/Arquivo */
+#menu-arquivo {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    margin-top: 20px; /* Dá um espacinho extra dos outros links para isolar a ação */
+    color: #d84b6b; /* Um tom de rosa mais escuro/avermelhado para indicar exclusão */
+    font-weight: bold;
+}
+
+#menu-arquivo:hover {
+    background-color: #ffb3ba; /* Fundo rosa avermelhado no hover */
+    color: var(--roxo-kuromi-escuro);
+    transform: translateX(5px);
+}
+
+/* Quando um card estiver sendo arrastado, o menu "acende" */
+body.arrastando-ativo #menu-arquivo {
+    background-color: var(--rosa-melody);
+    transform: scale(1.05);
+    border: 2px dashed var(--roxo-kuromi-escuro);
+    color: var(--roxo-kuromi-escuro);
+}
+
+/* --- ESTILOS DA PÁGINA DE DISCIPLINAS --- */
+
+.grid-disciplinas {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.card-disciplina {
+    background-color: var(--branco-puro);
+    border: 1px solid var(--roxo-kuromi-suave);
+    border-radius: var(--borda-arredondada);
+    padding: 25px;
+    box-shadow: var(--sombra-suave);
+}
+
+.disciplina-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed var(--roxo-kuromi-suave);
+}
+
+.botao-secundario-pequeno {
+    background: transparent;
+    border: 1px solid var(--roxo-kuromi-suave);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+}
+
+.disciplina-corpo {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Divide exatamente 50/50 */
+    gap: 30px;
+}
+
+.coluna-esquerda {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaçamento entre as Faltas e a Média */
+}
+
+.coluna-direita {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--fundo-principal); /* Cria uma "caixa" visual para as avaliações */
+    border-radius: 12px;
+    padding: 15px;
+    /* Aumentamos a altura máxima para caberem muito mais notas sem scroll */
+    max-height: 280px; 
+}
+
+.bloco-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: var(--roxo-kuromi-escuro);
+}
+
+.btn-adicionar-falta {
+    background-color: var(--rosa-melody);
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: transform 0.2s;
+}
+
+.btn-adicionar-falta:hover {
+    transform: scale(1.1);
+}
+
+/* Os marcadores visuais tateis para as faltas */
+.trilha-faltas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.falta-vazia, .falta-marcada {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px; /* Um quadrado levemente arredondado */
+}
+
+.falta-vazia {
+    border: 2px solid var(--roxo-kuromi-suave);
+    background-color: transparent;
+}
+
+.falta-marcada {
+    background-color: var(--roxo-kuromi-escuro);
+    /* Opcional: Se você tiver um ícone pequeno da Kuromi (ex: 16x16), pode colocá-lo aqui 
+       background-image: url('imgs/mini-caveira.png');
+       background-size: cover; */
+}
+
+/* O Display da Nota */
+.display-nota {
+    background-color: var(--fundo-principal);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.nota-valor {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+}
+
+.nota-meta {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Estilo do Dropdown */
+select {
+    padding: 12px;
+    border: 2px solid var(--roxo-kuromi-suave);
+    border-radius: 12px;
+    background-color: var(--branco-puro);
+    outline: none;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    font-family: inherit;
+    color: var(--roxo-kuromi-escuro);
+}
+
+/* Estilo da lista de notas dentro do card */
+.lista-notas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-top: 10px;
+    flex-grow: 1; /* Faz a lista esticar para preencher o espaço */
+}
+
+.item-nota {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--branco-puro);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    border: 1px dashed var(--roxo-kuromi-suave);
+}
+
+.item-nota .titulo-peso {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-nota .peso-badge {
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
+
+.item-nota .valor-destaque {
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+    background-color: var(--roxo-kuromi-suave);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+/* --- Controle Segmentado (View Switcher) --- */
+.seletor-visualizacao {
+    display: flex;
+    background-color: var(--branco-puro);
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: inset 0 2px 4px rgba(74, 59, 82, 0.05);
+    border: 1px solid var(--roxo-kuromi-suave);
+}
+
+.btn-view {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: var(--roxo-kuromi-suave);
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-view.ativo {
+    background-color: var(--roxo-kuromi-suave);
+    color: var(--roxo-kuromi-escuro);
+    box-shadow: 0 2px 8px rgba(74, 59, 82, 0.1);
+}
+
+/* --- Divisores de Mês na visualização "Todas" --- */
+.divisor-mes {
+    display: flex;
+    align-items: center;
+    margin: 30px 0 15px 0;
+    text-align: center;
+}
+
+.divisor-mes::before,
+.divisor-mes::after {
+    content: '';
+    flex: 1;
+    border-bottom: 2px dashed var(--roxo-kuromi-suave);
+}
+
+.divisor-mes span {
+    padding: 0 15px;
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+    background-color: var(--fundo-principal);
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+/* Container flexível para abrigar múltiplos grids */
+#container-tarefas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.grid-tarefas-isolado {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+/* --- Visualização Exclusiva do DIA --- */
+
+/* Cabeçalho do Dia (Data e Fato Curioso) */
+.header-dia {
+    text-align: center;
+    background-color: var(--branco-puro);
+    padding: 25px;
+    border-radius: var(--borda-arredondada);
+    box-shadow: var(--sombra-suave);
+    border: 1px dashed var(--roxo-kuromi-suave);
+    margin-bottom: 20px;
+}
+
+.header-dia h2 {
+    font-size: 2.2rem;
+    color: var(--roxo-kuromi-escuro);
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+.fato-curioso-texto {
+    font-size: 1rem;
+    opacity: 0.8;
+    max-width: 80%;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Grid especial para os cards expandidos (menos colunas, mais espaço) */
+.grid-dia-expandido {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cards mais largos */
+    gap: 20px;
+}
+
+/* Modificador do Card para a visão do Dia */
+.card-tarefa.expandido {
+    padding: 30px;
+    min-height: 140px; /* Mais alto */
+    background-color: var(--branco-puro); /* Cor de fundo diferente para destaque */
+    border: 2px solid var(--roxo-kuromi-suave);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-tarefa.expandido .texto-detalhe {
+    font-size: 1.5rem; /* Texto da tarefa bem maior */
+    margin-top: 5px;
+}
+
+.card-tarefa.expandido .checkbox-concluir {
+    width: 28px; /* Checkbox maior */
+    height: 28px;
+}
+
+.card-tarefa.expandido .checkbox-concluir::before {
+    font-size: 16px; /* Coração maior */
+}
+
+/* Garante que tarefas pessoais fiquem rosa mesmo no modo expandido (Dia) */
+.card-tarefa.expandido.pessoal {
+    background-color: var(--rosa-melody);
+    border-color: var(--roxo-kuromi-suave);
+}
+
+/* Estilo e animação da imagem da Kuromi no cabeçalho do Dia */
+.imagem-header-dia {
+    width: 120px; /* Ajuste o tamanho conforme a sua imagem */
+    margin: 20px auto 0;
+    display: block;
+    animation: flutuar 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 10px rgba(74, 59, 82, 0.15));
+}
+
+/* Animação suave de subir e descer */
+@keyframes flutuar {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+/* Estilo dos itens de lembrete dentro do widget */
+.item-lembrete {
+    background-color: var(--branco-puro);
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    border: 1px solid var(--roxo-kuromi-suave);
+    cursor: url('imgs/grab.png') 16 16, grab;
+    /* REMOVIDO o 'transition: transform' para não brigar com a física do arrasto */
+}
+
+.item-lembrete:active {
+    cursor: url('imgs/grabbing.png') 16 16, grabbing;
+}
+
+/* Imagem da Kuromi bebendo água quando vazio */
+.img-lembrete-vazio {
+    width: 100px;
+    display: block;
+    margin: 15px auto 0;
+    opacity: 0.8;
+}
+
+/* Botão de remover nota (o círculo com X) */
+.btn-remover-nota {
+    background-color: #ffb3ba; /* Um rosa avermelhado suave */
+    color: white;
+    border: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 1;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    opacity: 0; /* Invisível por padrão */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    padding: 0;
+}
+
+/* Faz o botão aparecer quando passamos o mouse no item da nota */
+.item-nota:hover .btn-remover-nota {
+    opacity: 1;
+}
+
+.btn-remover-nota:hover {
+    transform: scale(1.2);
+    background-color: #ff8b94;
+}
+
+/* --- ESTILOS DA BIBLIOTECA --- */
+
+.grid-leituras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card-leitura {
+    background-color: var(--branco-puro);
+    border: 1px solid var(--roxo-kuromi-suave);
+    border-radius: var(--borda-arredondada);
+    padding: 20px;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.leitura-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.leitura-titulo {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.leitura-autor {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* Badges de Status Automáticos */
+.status-badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-pendente { background-color: var(--fundo-principal); color: var(--roxo-kuromi-escuro); border: 1px solid var(--roxo-kuromi-suave); }
+.status-lendo { background-color: var(--rosa-melody); color: var(--roxo-kuromi-escuro); }
+.status-concluido { background-color: var(--roxo-kuromi-suave); color: var(--roxo-kuromi-escuro); }
+
+/* Barra de Progresso de Leitura */
+.container-progresso {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--roxo-kuromi-suave);
+}
+
+.info-progresso {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.barra-fundo {
+    background-color: var(--fundo-principal);
+    border-radius: 10px;
+    height: 12px;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--roxo-kuromi-suave);
+}
+
+.barra-preenchimento {
+    background-color: var(--roxo-kuromi-escuro);
+    height: 100%;
+    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    border-radius: 8px;
+}
+
+/* Ações Rápidas do Card (Atualizar páginas rapidamente) */
+.acoes-leitura {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.btn-atualizar-pag {
+    background: transparent;
+    border: 1px solid var(--roxo-kuromi-suave);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: background 0.2s;
+}
+
+.btn-atualizar-pag:hover { background-color: var(--rosa-melody); }
+
+/* --- ESTILOS DO POMODORO --- */
+.controles-pomodoro {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-pomodoro {
+    background-color: var(--roxo-kuromi-suave);
+    border: 1px solid rgba(74, 59, 82, 0.1);
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-pomodoro:hover {
+    background-color: var(--rosa-melody);
+    transform: scale(1.05);
+}
+
+.btn-pomodoro.oculto {
+    display: none;
+}
+
+/* Um toque visual de quando o tempo estiver correndo */
+.pomodoro-rodando .timer {
+    color: var(--rosa-melody);
+    text-shadow: 0 0 10px rgba(250, 212, 216, 0.8);
+    animation: pulso-suave 2s infinite;
+}
+
+@keyframes pulso-suave {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* --- ESTILOS DO GRÁFICO DE PROGRESSO --- */
+.container-grafico {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.grafico-rosca {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    /* O segredo: o gradiente usa uma variável CSS --p para a porcentagem */
+    background: conic-gradient(
+        var(--roxo-kuromi-escuro) calc(var(--p) * 1%), 
+        var(--roxo-kuromi-suave) 0
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: --p 0.5s ease; /* Animação suave da transição */
+}
+
+/* Criando o "buraco" no meio para virar uma rosca */
+.miolo-grafico {
+    width: 110px;
+    height: 110px;
+    background-color: var(--branco-puro);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 10px rgba(74, 59, 82, 0.1);
+}
+
+#porcentagem-texto {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+}
+
+/* Registra a variável para o navegador entender como animar números */
+@property --p {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
+/* --- CONFIGURAÇÕES E BACKUP --- */
+.configuracoes-sidebar {
+    margin-top: auto; /* Empurra para o final da sidebar */
+    padding-bottom: 10px;
+}
+
+.perfil-seletor select {
+    width: 100%;
+    padding: 5px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--roxo-kuromi-suave);
+}
+
+.botoes-backup {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-config {
+    flex: 1;
+    font-size: 0.7rem;
+    padding: 8px 5px;
+    background-color: var(--fundo-principal);
+    border: 1px solid var(--roxo-kuromi-suave);
+    border-radius: 8px;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    font-weight: bold;
+}
+
+.btn-config:hover {
+    background-color: var(--rosa-melody);
+}
+
+body.dark-mode {
+    /* As variáveis de cor que você gostou */
+    --fundo-principal: #1A161D; /* O roxo quase preto que define o fundo */
+    --roxo-kuromi-suave: #3A2E42; 
+    --roxo-kuromi-escuro: #E0D5E8; 
+    --rosa-melody: #4D3338; 
+    --branco-puro: #2D2433; /* O tom escuro usado nos modais */
+    --sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+    background-image: url('imgs/night1.jpg');
+    background-color: var(--fundo-principal) !important;
+    color: #E0D5E8;
+}
+
+body.dark-mode .modal-conteudo {
+    background-color: var(--branco-puro) !important;
+    color: #E0D5E8 !important;
+    border: 1px solid var(--roxo-kuromi-suave) !important;
+    box-shadow: var(--sombra-suave);
+}
+
+/* 3. Ajuste de contraste para os inputs dentro do modal escuro */
+body.dark-mode .grupo-input input,
+body.dark-mode .grupo-input select {
+    background-color: rgba(255, 255, 255, 0.05); /* Leve fundo transparente */
+    color: #E0D5E8;
+    border-color: var(--roxo-kuromi-suave);
+}
+
+/* 4. Ajuste dos botões de ação do modal (Save/Cancel) */
+body.dark-mode .botoes-modal .botao-primario {
+    color: var(--roxo-kuromi-escuro);
+}
+
+body.dark-mode .botoes-modal .botao-secundario {
+    border-color: var(--roxo-kuromi-suave);
+    color: var(--roxo-kuromi-escuro);
+}
+
+/* Botão de alternar na sidebar */
+.btn-tema {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    margin-left: 10px;
+}
+
+/* Classe Zen que esconde a sidebar e os widgets */
+body.zen-mode .sidebar, 
+body.zen-mode .painel-widgets > :not(.pomodoro),
+body.zen-mode .cabecalho-principal {
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+body.zen-mode .dashboard-container {
+    grid-template-columns: 1fr; /* Ocupa a tela toda */
+}
+
+body.zen-mode .conteudo-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
