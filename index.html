@@ -36,9 +36,10 @@
                     </select>
                 </div>
                 
-                <div class="botoes-backup">
+               <div class="botoes-backup">
                     <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
                     <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
+                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">🗑️ Reset</button>
                     <input type="file" id="input-importar" style="display: none;" accept=".json">
                 </div>
             </div>
@@ -101,6 +102,10 @@
                     <button id="btn-pomodoro-pause" class="btn-pomodoro oculto">⏸️ Pause</button>
                     <button id="btn-pomodoro-reset" class="btn-pomodoro">🔄 Reset</button>
                     <button id="btn-zen" class="btn-pomodoro">🧘 Modo Foco</button>
+                </div>
+
+                <div id="container-radio" class="oculto" style="margin-top: 15px; border-radius: 12px; overflow: hidden; border: 2px solid var(--roxo-kuromi-suave);">
+                    <iframe id="radio-kuromi" width="100%" height="150" src="" title="Rádio Kuromi Lofi" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 

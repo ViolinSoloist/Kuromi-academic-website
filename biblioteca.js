@@ -211,3 +211,19 @@ btnDark.addEventListener('click', () => {
     localStorage.setItem('kuromi_tema', isDark ? 'dark' : 'light');
     btnDark.textContent = isDark ? "☀️" : "🌙";
 });
+
+// ================
+// RESET MASTER
+// ================
+const btnResetMaster = document.getElementById('btn-reset-master');
+if (btnResetMaster) {
+    btnResetMaster.addEventListener('click', () => {
+        if (confirm("🚨 ATENÇÃO! Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
+            // Limpa o banco de dados inteiro do navegador
+            localStorage.clear();
+            alert("Tudo foi apagado. A Kuromi varreu a casa! O site será recarregado do zero. 🧹✨");
+            // Recarrega a página para voltar ao estado de fábrica
+            window.location.reload();
+        }
+    });
+}

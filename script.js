@@ -254,6 +254,7 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
         checkbox.addEventListener('change', () => {
             const tarefaGlobal = tarefas.find(t => t.id === tarefa.id);
             if(tarefaGlobal) tarefaGlobal.concluida = checkbox.checked;
+            salvarTarefas(); 
             renderizarTarefas(); 
         });
 
@@ -362,6 +363,7 @@ function ativarSortable(elementoContainer, ehLembrete = false) {
                 const tarefasReorganizadas = novaOrdemVisual.map(id => tarefas.find(t => t.id === id));
                 
                 tarefas = [...tarefasReorganizadas, ...tarefasOcultas];
+                salvarTarefas();
             }
         }
     });
@@ -536,6 +538,7 @@ btnMenuArquivo.addEventListener('click', () => {
             
             // Mantém no array apenas as tarefas que NÃO estão concluídas
             tarefas = tarefas.filter(t => !t.concluida);
+            salvarTarefas();
             
             // Efeitos sonoros e visuais no centro da tela
             if (somSnap) somSnap.play().catch(() => {});
@@ -628,3 +631,19 @@ btnZen.addEventListener('click', () => {
     document.body.classList.toggle('zen-mode');
     btnZen.textContent = document.body.classList.contains('zen-mode') ? "🔙 Sair do Foco" : "🧘 Modo Foco";
 });
+
+// ================
+// RESET MASTER
+// ================
+const btnResetMaster = document.getElementById('btn-reset-master');
+if (btnResetMaster) {
+    btnResetMaster.addEventListener('click', () => {
+        if (confirm("🚨 ATENÇÃO! Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
+            // Limpa o banco de dados inteiro do navegador
+            localStorage.clear();
+            alert("Tudo foi apagado. A Kuromi varreu a casa! O site será recarregado do zero. 🧹✨");
+            // Recarrega a página para voltar ao estado de fábrica
+            window.location.reload();
+        }
+    });
+}
