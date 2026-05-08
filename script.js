@@ -37,10 +37,11 @@ const textoVisao = document.getElementById('texto-visao');
 const botoesView = document.querySelectorAll('.btn-view');
 
 let visualizacaoAtual = 'dia'; 
-
-// SEPARAÇÃO DOS MOTORES DE ARRASTO (Correção do Bug)
 let instanciasSortableTarefas = []; 
 let instanciaSortableLembrete = null; 
+
+let humorAtual = localStorage.getItem('kuromi_humor') || 'feliz';
+const botoesHumor = document.querySelectorAll('.btn-humor');
 
 // 2. Funções de Data
 function ehDestaSemana(dataString) {
@@ -147,8 +148,13 @@ function renderizarTarefas(animarOrdem = false) {
 
         headerDia.innerHTML = `
             <h2>${dataFormatada}</h2>
-            <p id="fato-curioso" class="fato-curioso-texto">Buscando um fato curioso na história... ⏳</p>
-            <img src="imgs/kuromi_bleh.png" class="imagem-header-dia" alt="Kuromi animando seu dia!">
+            <div class="container-interativo">
+                <img src="imgs/kuromi_bleh.png" id="kuromi-interativa-img" class="imagem-header-dia" style="margin: 0; animation: flutuar 3s ease-in-out infinite; width: 100px;" alt="Kuromi">
+                <div class="balao-fala">
+                    <p id="kuromi-interativa-fala"></p>
+                    <p id="fato-curioso" class="fato-curioso-texto" style="font-size: 0.75rem; margin: 0; opacity: 0.7; border-top: 1px dashed var(--roxo-kuromi-suave); padding-top: 8px; margin-top: 8px;">Buscando um fato curioso na história... ⏳</p>
+                </div>
+            </div>
         `;
         containerTarefas.appendChild(headerDia);
 
@@ -168,22 +174,22 @@ function renderizarTarefas(animarOrdem = false) {
             .catch(() => {
                 document.getElementById('fato-curioso').textContent = "Hoje é um dia maravilhoso para focar em você! 💜";
             });
-
-        if (tarefasParaExibir.length === 0) {
-            const semTarefas = document.createElement('p');
-            semTarefas.style = "text-align: center; opacity: 0.6; font-weight: bold; margin-top: 40px;";
-            semTarefas.textContent = "Nenhuma tarefa pra hoje! A Kuromi diz pra você ir descansar 💜";
-            containerTarefas.appendChild(semTarefas);
-        } else {
-            const gridUnico = document.createElement('div');
-            gridUnico.classList.add('grid-dia-expandido'); 
-            preencherGrid(gridUnico, tarefasParaExibir, animarOrdem, true); 
-            containerTarefas.appendChild(gridUnico);
+            if (tarefasParaExibir.length === 0) {
+                const semTarefas = document.createElement('p');
+                semTarefas.style = "text-align: center; opacity: 0.6; font-weight: bold; margin-top: 40px;";
+                semTarefas.textContent = "Nenhuma tarefa pra hoje! A Kuromi diz pra você ir descansar 💜";
+                containerTarefas.appendChild(semTarefas);
+            } else {
+                const gridUnico = document.createElement('div');
+                gridUnico.classList.add('grid-dia-expandido'); 
+                preencherGrid(gridUnico, tarefasParaExibir, animarOrdem, true); 
+                containerTarefas.appendChild(gridUnico);
+                
+                // Adiciona o motor isolado ao array correto
+                instanciasSortableTarefas.push(ativarSortable(gridUnico));
+            }
             
-            // Adiciona o motor isolado ao array correto
-            instanciasSortableTarefas.push(ativarSortable(gridUnico));
-        }
-        
+        atualizarKuromi();
         atualizarGraficoProgresso();
         return; 
     }
@@ -626,11 +632,48 @@ btnDark.addEventListener('click', () => {
     btnDark.textContent = isDark ? "☀️" : "🌙";
 });
 
+// ==========================================
+// MÓDULO: MODO FOCO E RÁDIO KUROMI
+// ==========================================
 const btnZen = document.getElementById('btn-zen');
-btnZen.addEventListener('click', () => {
-    document.body.classList.toggle('zen-mode');
-    btnZen.textContent = document.body.classList.contains('zen-mode') ? "🔙 Sair do Foco" : "🧘 Modo Foco";
-});
+const containerRadio = document.getElementById('container-radio');
+const iframeRadio = document.getElementById('radio-kuromi');
+
+// O ID 'jfKfPfyJRdk' é a live 24/7 de Lofi Hip Hop
+// O '?autoplay=1' força o vídeo a começar sozinho quando o link é carregado
+const linkRadioAoVivo = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1&disablekb=1&fs=0&modestbranding=1";
+
+if (btnZen) {
+    btnZen.addEventListener('click', () => {
+        // 1. Alterna a classe que limpa o ecrã (Modo Zen)
+        document.body.classList.toggle('zen-mode');
+        const isZen = document.body.classList.contains('zen-mode');
+        
+        if (isZen) {
+            // 2. Entrando no Modo Foco
+            btnZen.innerHTML = "🔙 Sair do Foco";
+            btnZen.style.backgroundColor = "var(--rosa-melody)";
+            btnZen.style.color = "var(--roxo-kuromi-escuro)";
+            
+            // Exibe o player e injeta o link para começar a música automaticamente
+            if (containerRadio) {
+                containerRadio.classList.remove('oculto');
+                iframeRadio.src = linkRadioAoVivo;
+            }
+        } else {
+            // 3. Saindo do Modo Foco
+            btnZen.innerHTML = "🧘 Modo Foco";
+            btnZen.style.backgroundColor = ""; // Volta ao padrão do CSS
+            btnZen.style.color = "";
+            
+            // Esconde o player e "destrói" o link para a música parar imediatamente
+            if (containerRadio) {
+                containerRadio.classList.add('oculto');
+                iframeRadio.src = "";
+            }
+        }
+    });
+}
 
 // ================
 // RESET MASTER
@@ -644,6 +687,119 @@ if (btnResetMaster) {
             alert("Tudo foi apagado. A Kuromi varreu a casa! O site será recarregado do zero. 🧹✨");
             // Recarrega a página para voltar ao estado de fábrica
             window.location.reload();
+        }
+    });
+}
+
+// ==========================================
+// MÓDULO: RASTREADOR DE HUMOR E KUROMI INTERATIVA
+// ==========================================
+
+function atualizarKuromi() {
+    const imgKuromi = document.getElementById('kuromi-interativa-img');
+    const falaKuromi = document.getElementById('kuromi-interativa-fala');
+    
+    if (!imgKuromi || !falaKuromi) return; // Só tenta atualizar se a visão do 'Dia' estiver aberta
+    
+    const hora = new Date().getHours();
+    let imagem = 'imgs/kuromi_bleh.png'; 
+    let mensagem = '';
+
+    // Lógica Dinâmica baseada no Humor e na Hora
+    if (humorAtual === 'estressada') {
+        imagem = 'imgs/Kuromi-rightPeek.png'; 
+        mensagem = "Respira fundo, Lara! Que tal ligar o Modo Foco e colocar a nossa Rádio Lofi tocar? 🎧";
+    } else if (humorAtual === 'cansada') {
+        imagem = 'imgs/Kuromi_walking.png'; 
+        mensagem = "Se está exausta, faça apenas o essencial hoje. Descansar também é ser produtiva! 💤";
+    } else if (humorAtual === 'foco') {
+        imagem = 'imgs/kuromi_skate.png';
+        mensagem = "Olhar de predadora! Vamos gabaritar essas tarefas e dominar o mundo. 🎯";
+    } else {
+        // Se estiver "Feliz" (ou por padrão), reage à hora do dia
+        if (hora >= 5 && hora < 12) {
+            mensagem = "Bom dia, flor do dia! O café já está pronto? Vamos conquistar o mundo hoje! ☕";
+        } else if (hora >= 12 && hora < 18) {
+            mensagem = "Boa tarde! Continue firme, você está indo muito bem! 🚀";
+        } else if (hora >= 18 && hora < 23) {
+            mensagem = "Boa noite! Quase na hora de descansar essa mente brilhante. 🌙";
+        } else {
+            mensagem = "Lara, vai dormir! A faculdade não vale as suas olheiras. Desliga isso agora! 🦉";
+            imagem = 'imgs/Kuromi-rightPeek.png'; // Kuromi dando bronca
+        }
+    }
+
+    imgKuromi.src = imagem;
+    falaKuromi.textContent = mensagem;
+}
+
+function renderizarHumor() {
+    botoesHumor.forEach(btn => {
+        btn.classList.remove('ativo');
+        if(btn.dataset.humor === humorAtual) btn.classList.add('ativo');
+    });
+    atualizarKuromi(); // Atualiza a fala da Kuromi na hora
+}
+
+botoesHumor.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        humorAtual = e.currentTarget.dataset.humor;
+        localStorage.setItem('kuromi_humor', humorAtual);
+        renderizarHumor();
+    });
+});
+
+// Inicializa
+renderizarHumor();
+
+// ==========================================
+// MÓDULO: FOTO DE PERFIL (AVATAR)
+// ==========================================
+const imgAvatar = document.getElementById('avatar-img');
+const inputAvatar = document.getElementById('input-avatar');
+
+if (imgAvatar && inputAvatar) {
+    // 1. Carrega a imagem salva ou a padrão da Kuromi
+    const avatarSalvo = localStorage.getItem('kuromi_avatar');
+    if (avatarSalvo) {
+        imgAvatar.src = avatarSalvo;
+    } else {
+        imgAvatar.src = 'imgs/cool-kuromi.jpg'; // A imagem padrão se não houver nenhuma
+    }
+
+    // 2. Clicar no avatar abre a janela para escolher um arquivo
+    imgAvatar.parentElement.addEventListener('click', () => {
+        inputAvatar.click();
+    });
+
+    // 3. Quando escolher um arquivo, converte para Base64 e salva
+    inputAvatar.addEventListener('change', (e) => {
+        const arquivo = e.target.files[0];
+        
+        if (arquivo) {
+            // Trava de segurança: O localStorage tem um limite de espaço (~5MB). 
+            // Bloqueamos fotos gigantes para não corromper o arquivo de backup.
+            if (arquivo.size > 2 * 1024 * 1024) { // 2 Megabytes
+                alert("Essa foto é muito pesada! Escolha uma imagem com menos de 2MB. 💜");
+                return;
+            }
+
+            const leitor = new FileReader();
+            leitor.onload = (eventoBase64) => {
+                const base64String = eventoBase64.target.result;
+                
+                // Atualiza a imagem na tela
+                imgAvatar.src = base64String;
+                
+                // Salva no "Cofre" do navegador
+                localStorage.setItem('kuromi_avatar', base64String);
+                
+                // Dispara purpurina de comemoração
+                criarPurpurina(window.innerWidth / 2, window.innerHeight / 2);
+            };
+            
+            // Inicia a leitura do arquivo como uma URL de Dados (Base64)
+            leitor.readAsDataURL(arquivo);
         }
     });
 }

@@ -12,9 +12,13 @@
         
         <aside class="sidebar">
             <div class="perfil-usuario">
-                <div class="avatar-placeholder"></div>
-                <h2>Olá, Lara! <button id="toggle-dark" class="btn-tema">🌙</button></h2>
+                <div class="avatar-container" title="Mudar foto de perfil">
+                    <img id="avatar-img" src="imgs/kuromi_bleh.png" class="avatar-placeholder" alt="Foto de Perfil">
+                    <input type="file" id="input-avatar" accept="image/*" style="display: none;">
+                </div>
+                <h2>Oie, Lara! 💜  <button id="toggle-dark" class="btn-tema">🌙</button></h2>
             </div>
+            
             <nav class="menu-navegacao">
                 <ul>
                     <li onclick="window.location.href='index.html'">Tarefas e Prazos</li>
@@ -37,8 +41,18 @@
                 <div class="botoes-backup">
                     <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
                     <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
-                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">🗑️ Reset</button>
+                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">☠️ Reset</button>
                     <input type="file" id="input-importar" style="display: none;" accept=".json">
+                </div>
+
+                <div class="rastreador-humor" style="margin-top: 20px; border-top: 1px dashed var(--roxo-kuromi-suave); padding-top: 15px;">
+                    <h4 style="font-size: 0.75rem; opacity: 0.8; margin-bottom: 10px; text-align: center;">Como você se sente hoje?</h4>
+                    <div class="opcoes-humor">
+                        <button class="btn-humor" data-humor="feliz" title="Feliz">😊</button>
+                        <button class="btn-humor" data-humor="foco" title="Focada">🤓</button>
+                        <button class="btn-humor" data-humor="cansada" title="Cansada">😫</button>
+                        <button class="btn-humor" data-humor="estressada" title="Estressada">🤯</button>
+                    </div>
                 </div>
             </div>
         </aside>

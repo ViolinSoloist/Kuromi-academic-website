@@ -313,3 +313,55 @@ btnDark.addEventListener('click', () => {
     localStorage.setItem('kuromi_tema', isDark ? 'dark' : 'light');
     btnDark.textContent = isDark ? "☀️" : "🌙";
 });
+
+// ==========================================
+// MÓDULO: FOTO DE PERFIL (AVATAR)
+// ==========================================
+const imgAvatar = document.getElementById('avatar-img');
+const inputAvatar = document.getElementById('input-avatar');
+
+if (imgAvatar && inputAvatar) {
+    // 1. Carrega a imagem salva ou a padrão da Kuromi
+    const avatarSalvo = localStorage.getItem('kuromi_avatar');
+    if (avatarSalvo) {
+        imgAvatar.src = avatarSalvo;
+    } else {
+        imgAvatar.src = 'imgs/cool-kuromi.jpg'; // A imagem padrão se não houver nenhuma
+    }
+
+    // 2. Clicar no avatar abre a janela para escolher um arquivo
+    imgAvatar.parentElement.addEventListener('click', () => {
+        inputAvatar.click();
+    });
+
+    // 3. Quando escolher um arquivo, converte para Base64 e salva
+    inputAvatar.addEventListener('change', (e) => {
+        const arquivo = e.target.files[0];
+        
+        if (arquivo) {
+            // Trava de segurança: O localStorage tem um limite de espaço (~5MB). 
+            // Bloqueamos fotos gigantes para não corromper o arquivo de backup.
+            if (arquivo.size > 2 * 1024 * 1024) { // 2 Megabytes
+                alert("Essa foto é muito pesada! Escolha uma imagem com menos de 2MB. 💜");
+                return;
+            }
+
+            const leitor = new FileReader();
+            leitor.onload = (eventoBase64) => {
+                const base64String = eventoBase64.target.result;
+                
+                // Atualiza a imagem na tela
+                imgAvatar.src = base64String;
+                
+                // Salva no "Cofre" do navegador
+                localStorage.setItem('kuromi_avatar', base64String);
+                
+                // Dispara purpurina de comemoração
+                criarPurpurina(window.innerWidth / 2, window.innerHeight / 2);
+            };
+            
+            // Inicia a leitura do arquivo como uma URL de Dados (Base64)
+            leitor.readAsDataURL(arquivo);
+        }
+    });
+}

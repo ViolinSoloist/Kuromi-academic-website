@@ -13,8 +13,11 @@
         <!-- Menu Lateral Rápido -->
         <aside class="sidebar">
             <div class="perfil-usuario">
-                <div class="avatar-placeholder"></div>
-                <h2>Olá, Lara! <button id="toggle-dark" class="btn-tema">🌙</button></h2>
+                <div class="avatar-container" title="Mudar foto de perfil">
+                    <img id="avatar-img" src="imgs/cool-kuromi.jpg" class="avatar-placeholder" alt="Foto de Perfil">
+                    <input type="file" id="input-avatar" accept="image/*" style="display: none;">
+                </div>
+                <h2>Oie, Lara! 💜  <button id="toggle-dark" class="btn-tema">🌙</button></h2>
             </div>
 
             <nav class="menu-navegacao">
@@ -36,11 +39,21 @@
                     </select>
                 </div>
                 
-               <div class="botoes-backup">
+                <div class="botoes-backup">
                     <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
                     <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
-                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">🗑️ Reset</button>
+                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">☠️ Reset</button>
                     <input type="file" id="input-importar" style="display: none;" accept=".json">
+                </div>
+
+                <div class="rastreador-humor" style="margin-top: 20px; border-top: 1px dashed var(--roxo-kuromi-suave); padding-top: 15px;">
+                    <h4 style="font-size: 0.75rem; opacity: 0.8; margin-bottom: 10px; text-align: center;">Como você se sente hoje?</h4>
+                    <div class="opcoes-humor">
+                        <button class="btn-humor" data-humor="feliz" title="Feliz">😊</button>
+                        <button class="btn-humor" data-humor="foco" title="Focada">🤓</button>
+                        <button class="btn-humor" data-humor="cansada" title="Cansada">😫</button>
+                        <button class="btn-humor" data-humor="estressada" title="Estressada">🤯</button>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -102,6 +115,10 @@
                     <button id="btn-pomodoro-pause" class="btn-pomodoro oculto">⏸️ Pause</button>
                     <button id="btn-pomodoro-reset" class="btn-pomodoro">🔄 Reset</button>
                     <button id="btn-zen" class="btn-pomodoro">🧘 Modo Foco</button>
+                </div>
+
+                <div id="container-radio" class="oculto" style="margin-top: 15px; border-radius: 12px; overflow: hidden; border: 2px solid var(--roxo-kuromi-suave);">
+                    <iframe id="radio-kuromi" width="100%" height="150" src="" title="Rádio Kuromi Lofi" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 

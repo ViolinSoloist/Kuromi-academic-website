@@ -75,12 +75,42 @@ a, button, .menu-navegacao li {
     margin-bottom: 40px;
 }
 
+/* --- ESTILOS DO AVATAR DE PERFIL --- */
+.avatar-container {
+    position: relative;
+    display: inline-block;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    margin-bottom: 15px;
+    transition: transform 0.2s ease;
+}
+
+.avatar-container:hover {
+    transform: scale(1.05);
+}
+
+/* O pequeno ícone de câmara fotográfica para indicar que é clicável */
+.avatar-container::after {
+    content: '📷';
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
+    background: var(--branco-puro);
+    border-radius: 50%;
+    padding: 4px;
+    font-size: 1rem;
+    box-shadow: var(--sombra-suave);
+    pointer-events: none;
+}
+
+/* A Imagem de Perfil */
 .avatar-placeholder {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     background-color: var(--roxo-kuromi-suave);
     border-radius: 50%;
-    margin: 0 auto 15px;
+    object-fit: cover; /* Garante que fotos retangulares não fiquem esticadas */
+    border: 3px solid var(--roxo-kuromi-escuro);
+    display: block; /* Remove espaços em branco nativos de imagens */
 }
 
 .menu-navegacao ul {
@@ -1102,22 +1132,137 @@ body.dark-mode .botoes-modal .botao-secundario {
     margin-left: 10px;
 }
 
-/* Classe Zen que esconde a sidebar e os widgets */
+/* --- ESTILOS DO MODO FOCO (ZEN MODE) --- */
+
+/* Esconde as distrações com uma transição suave */
 body.zen-mode .sidebar, 
-body.zen-mode .painel-widgets > :not(.pomodoro),
-body.zen-mode .cabecalho-principal {
+body.zen-mode .cabecalho-principal,
+body.zen-mode .painel-widgets > :not(.pomodoro) {
     opacity: 0;
     pointer-events: none;
-    transition: 0.5s;
+    transition: opacity 0.5s ease;
 }
 
+/* Transforma o Grid para o Pomodoro e as Tarefas ficarem em evidência no centro do ecrã */
 body.zen-mode .dashboard-container {
-    grid-template-columns: 1fr; /* Ocupa a tela toda */
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    transition: all 0.5s ease;
 }
 
 body.zen-mode .conteudo-principal {
+    width: 60%;
+    max-width: 800px;
+    /* Remove a centralização forçada anterior para que as tarefas fiquem organizadas no topo */
+    display: block; 
+}
+
+body.zen-mode .painel-widgets {
+    width: 320px;
+}
+
+/* Garante que a sidebar organiza os itens do topo à base perfeitamente */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ESTILOS DO MOOD TRACKER (NA SIDEBAR) --- */
+.opcoes-humor {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.btn-humor {
+    background: var(--fundo-principal);
+    border: 2px solid transparent;
+    font-size: 1.2rem;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.btn-humor:hover {
+    transform: scale(1.15) translateY(-3px);
+    background-color: var(--rosa-melody);
+}
+
+.btn-humor.ativo {
+    border-color: var(--roxo-kuromi-escuro);
+    background-color: var(--roxo-kuromi-suave);
+    transform: scale(1.1);
+    box-shadow: var(--sombra-suave);
+}
+
+/* --- ESTILOS DA KUROMI INTERATIVA (BALÃO DE FALA) --- */
+.container-interativo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.balao-fala {
+    text-align: left;
+    background: var(--fundo-principal);
+    padding: 15px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--roxo-kuromi-suave);
+    position: relative;
+    flex: 1;
+    box-shadow: var(--sombra-suave);
+}
+
+/* O "biquinho" do balão apontando para a Kuromi */
+.balao-fala::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 12px solid var(--roxo-kuromi-suave);
+}
+
+.balao-fala::after {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 10px solid var(--fundo-principal);
+}
+
+#kuromi-interativa-fala {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--roxo-kuromi-escuro);
+}
+
+/* Ajuste do balão de fala no Modo Noturno */
+body.dark-mode .balao-fala {
+    background-color: var(--branco-puro);
+}
+body.dark-mode .balao-fala::after {
+    border-right-color: var(--branco-puro);
+}
+
+/* Esconde completamente a caixa da rádio quando o Modo Foco está desativado */
+#container-radio.oculto {
+    display: none;
+}
