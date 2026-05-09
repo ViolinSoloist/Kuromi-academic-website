@@ -60,6 +60,19 @@ function atualizarWidgetsLeitura() {
 function renderizarLeituras() {
     containerLeituras.innerHTML = '';
 
+    // --- NOVA LÓGICA DE ESTADO VAZIO ---
+    if (leituras.length === 0) {
+        containerLeituras.innerHTML = `
+            <div class="estado-vazio">
+                <img src="imgs/Kuromi-top2.png" alt="Sem leituras">
+                <p>Sua estante está vazia! 📖<br>Que tal adicionar um livro ou artigo novo?</p>
+            </div>
+        `;
+        atualizarWidgetsLeitura();
+        return; // Interrompe a função aqui
+    }
+    // -----------------------------------
+
     leituras.forEach(livro => {
         const card = document.createElement('div');
         card.classList.add('card-leitura');
@@ -211,5 +224,26 @@ if (btnResetMaster) {
             // Recarrega a página para voltar ao estado de fábrica
             window.location.reload();
         }
+    });
+}
+
+// --- SISTEMA DE BUSCA (BIBLIOTECA) ---
+const inputBuscaLib = document.getElementById('input-busca');
+if (inputBuscaLib) {
+    inputBuscaLib.addEventListener('input', (e) => {
+        const termo = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.card-leitura');
+        
+        cards.forEach(card => {
+            const titulo = card.querySelector('.leitura-titulo').textContent.toLowerCase();
+            const disciplina = card.querySelector('.disciplina-badge').textContent.toLowerCase();
+            
+            // Procura tanto no título do livro quanto na disciplina!
+            if (titulo.includes(termo) || disciplina.includes(termo)) {
+                card.style.display = 'flex'; // O card da biblioteca usa flex
+            } else {
+                card.style.display = 'none';
+            }
+        });
     });
 }

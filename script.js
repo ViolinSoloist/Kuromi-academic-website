@@ -77,9 +77,14 @@ botoesView.forEach(botao => {
         
         visualizacaoAtual = e.target.dataset.view;
         
-        if (visualizacaoAtual === 'dia') textoVisao.textContent = "do Dia";
-        else if (visualizacaoAtual === 'semana') textoVisao.textContent = "da Semana";
-        else textoVisao.textContent = "Geral (Todas)";
+        // --- TEXTOS MAIS SUCINTOS AQUI ---
+        if (visualizacaoAtual === 'dia') {
+            textoVisao.textContent = "Visão Geral do Dia";
+        } else if (visualizacaoAtual === 'semana') {
+            textoVisao.textContent = "Tarefas Semanais";
+        } else {
+            textoVisao.textContent = "Todas as Tarefas";
+        }
 
         renderizarTarefas();
     });

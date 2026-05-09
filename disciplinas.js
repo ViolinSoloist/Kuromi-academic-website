@@ -91,6 +91,20 @@ function atualizarRisco() {
 function renderizarDisciplinas() {
     gridDisciplinas.innerHTML = '';
 
+    // --- NOVA LÓGICA DE ESTADO VAZIO ---
+    if (disciplinas.length === 0) {
+        gridDisciplinas.innerHTML = `
+            <div class="estado-vazio">
+                <img src="imgs/kuromi_bleh.png" alt="Sem disciplinas">
+                <p>Nenhuma disciplina por aqui! 📚<br>Adicione uma nova no botão "+" ali em cima.</p>
+            </div>
+        `;
+        atualizarCRA();
+        atualizarRisco();
+        return; // Interrompe a função aqui para não tentar renderizar itens que não existem
+    }
+    // -----------------------------------
+
     disciplinas.forEach(disc => {
         const media = calcularMediaPonderada(disc.listaNotas);
         const card = document.createElement('div');
@@ -299,3 +313,24 @@ btnCancelarDisciplina.addEventListener('click', fecharModalDisciplina);
 btnCancelarNota.addEventListener('click', fecharModalNota);
 
 renderizarDisciplinas();
+
+// --- SISTEMA DE BUSCA (DISCIPLINAS) ---
+const inputBusca = document.getElementById('input-busca');
+if (inputBusca) {
+    inputBusca.addEventListener('input', (e) => {
+        const termo = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.card-disciplina');
+        
+        cards.forEach(card => {
+            // Pega o nome da disciplina dentro da tag <h2>
+            const titulo = card.querySelector('h2').textContent.toLowerCase();
+            
+            // Se o título incluir o termo buscado, mostra (display block), senão esconde (display none)
+            if (titulo.includes(termo)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}

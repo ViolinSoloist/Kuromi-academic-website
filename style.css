@@ -59,14 +59,15 @@ a, button, .menu-navegacao li {
     background-color: rgba(255, 255, 255, 0.75); 
 }
 
-/* O Layout em Grid principal do Dashboard */
+/* No começo do CSS, ajuste o container principal para permitir o scroll correto */
 .dashboard-container {
     display: grid;
     grid-template-columns: 250px 1fr 300px; 
     gap: 30px;
     width: 100%;
     max-width: 1400px;
-    height: 90vh; 
+    min-height: 90vh; /* Mude de 'height' para 'min-height' */
+    align-items: start; /* IMPORTANTE: Garante que as colunas não estiquem, permitindo o sticky funcionar */
 }
 
 /* Estilizando o Menu Lateral */
@@ -1049,9 +1050,9 @@ select {
     initial-value: 0;
 }
 
-/* --- CONFIGURAÇÕES E BACKUP --- */
+/* Ajuste as configurações para ficarem junto do menu */
 .configuracoes-sidebar {
-    margin-top: auto; /* Empurra para o final da sidebar */
+    margin-top: 20px; /* Substitua o 'margin-top: auto;' por 20px */
     padding-bottom: 10px;
 }
 
@@ -1166,6 +1167,15 @@ body.zen-mode .painel-widgets {
 .sidebar {
     display: flex;
     flex-direction: column;
+    position: sticky;
+    top: 20px; /* Quando faltar 20px pro topo da tela, ela gruda */
+    max-height: calc(100vh - 40px); /* Garante que a barra não vaze da tela */
+    overflow-y: auto; /* Se a tela for muito pequena, cria uma barra de rolagem fofa só pra ela */
+}
+
+/* Oculte a barra de rolagem da sidebar para manter a estética clean */
+.sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 /* --- ESTILOS DO MOOD TRACKER (NA SIDEBAR) --- */
@@ -1291,4 +1301,40 @@ body.dark-mode .card-tarefa.atrasada {
 .btn-editar-tarefa:hover {
     transform: scale(1.2);
     opacity: 1;
+}
+
+/* --- Ajuste de Altura Mínima e Estado Vazio --- */
+.conteudo-principal {
+    min-height: 65vh; /* Garante um tamanho mínimo mesmo sem conteúdo */
+    display: flex;
+    flex-direction: column; /* Permite que o conteúdo interno se expanda */
+}
+
+/* Garante que as sections ocupem o espaço restante */
+#container-leituras, .grid-disciplinas {
+    flex-grow: 1;
+}
+
+.estado-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0.8;
+    margin-top: 60px; /* Empurra um pouco para baixo para centralizar visualmente */
+}
+
+.estado-vazio img {
+    width: 130px;
+    margin-bottom: 20px;
+    animation: flutuar 3s ease-in-out infinite; /* Usa a mesma animação fofa que já criamos! */
+    filter: drop-shadow(0 10px 10px rgba(74, 59, 82, 0.15));
+}
+
+.estado-vazio p {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--roxo-kuromi-escuro);
+    line-height: 1.5;
 }
