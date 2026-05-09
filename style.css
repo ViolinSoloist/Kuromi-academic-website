@@ -1266,3 +1266,29 @@ body.dark-mode .balao-fala::after {
 #container-radio.oculto {
     display: none;
 }
+
+/* --- TAREFAS ATRASADAS E EDIÇÃO --- */
+.card-tarefa.atrasada {
+    background-color: #ffdde1; /* Um vermelho/rosa claro */
+    border: 2px solid #d84b6b; /* Borda vermelha de alerta */
+}
+
+/* Garante que a tarefa atrasada se adapte ao Dark Mode */
+body.dark-mode .card-tarefa.atrasada {
+    background-color: #4a2c31; 
+    border-color: #d84b6b;
+}
+
+.btn-editar-tarefa {
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    transition: transform 0.2s;
+    opacity: 0.6;
+}
+
+.btn-editar-tarefa:hover {
+    transform: scale(1.2);
+    opacity: 1;
+}

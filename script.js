@@ -37,6 +37,7 @@ const textoVisao = document.getElementById('texto-visao');
 const botoesView = document.querySelectorAll('.btn-view');
 
 let visualizacaoAtual = 'dia'; 
+let idEdicaoTarefa = null; // guarda tarefa sendo editada
 let instanciasSortableTarefas = []; 
 let instanciaSortableLembrete = null; 
 
@@ -87,12 +88,18 @@ botoesView.forEach(botao => {
 function agruparPorMes(listaTarefas) {
     const grupos = {};
     listaTarefas.forEach(t => {
-        const data = new Date(t.data + 'T00:00:00');
-        let mesAno = data.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
-        mesAno = mesAno.charAt(0).toUpperCase() + mesAno.slice(1);
-        
-        if (!grupos[mesAno]) grupos[mesAno] = [];
-        grupos[mesAno].push(t);
+        // Se a tarefa não tiver data, ela vai para a nossa nova categoria especial
+        if (!t.data) {
+            if (!grupos['Tarefas sem prazo definido']) grupos['Tarefas sem prazo definido'] = [];
+            grupos['Tarefas sem prazo definido'].push(t);
+        } else {
+            const data = new Date(t.data + 'T00:00:00');
+            let mesAno = data.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+            mesAno = mesAno.charAt(0).toUpperCase() + mesAno.slice(1);
+            
+            if (!grupos[mesAno]) grupos[mesAno] = [];
+            grupos[mesAno].push(t);
+        }
     });
     return grupos;
 }
@@ -226,11 +233,22 @@ function renderizarTarefas(animarOrdem = false) {
 
     atualizarGraficoProgresso();
 }
-
 function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
     lista.forEach((tarefa, index) => {
         const card = document.createElement('div');
         card.classList.add('card-tarefa');
+
+        // LÓGICA DE ATRASO: Verifica se tem data, não está concluída e é menor que hoje
+        let estaAtrasada = false;
+        if (tarefa.data && !tarefa.concluida) {
+            const dataTarefa = new Date(tarefa.data + 'T00:00:00');
+            const hoje = new Date();
+            hoje.setHours(0,0,0,0); // Ignora as horas
+            if (dataTarefa < hoje) {
+                card.classList.add('atrasada');
+                estaAtrasada = true;
+            }
+        }
 
         if (tarefa.disciplina === "Pessoal") card.classList.add('pessoal');
         if (isDiaView) card.classList.add('expandido');
@@ -243,12 +261,19 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
             card.style.animationDelay = `${index * 0.08}s`; 
         }
 
+        // Se não tiver data, mostra o texto de Sem Prazo
+        const textoData = tarefa.data ? formatarDataComDia(tarefa.data) : 'Sem Prazo';
+        const alertaAtraso = estaAtrasada ? '<span title="Atrasada!" style="margin-left: 5px;">⚠️</span>' : '';
+
         card.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span class="disciplina-badge" style="font-size: 0.85rem; font-weight: bold; opacity: 0.7;">${tarefa.disciplina || 'Pessoal'}</span>
-                <span style="font-size: 0.75rem; background: var(--fundo-principal); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--roxo-kuromi-suave);">
-                    ${formatarDataComDia(tarefa.data)}
-                </span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.75rem; background: var(--fundo-principal); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--roxo-kuromi-suave);">
+                        ${textoData} ${alertaAtraso}
+                    </span>
+                    <button class="btn-editar-tarefa" title="Editar Tarefa">✏️</button>
+                </div>
             </div>
             <div style="display: flex; align-items: center;">
                 <input type="checkbox" class="checkbox-concluir" ${tarefa.concluida ? 'checked' : ''}>
@@ -256,6 +281,7 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
             </div>
         `;
 
+        // Evento: Marcar como Concluída
         const checkbox = card.querySelector('.checkbox-concluir');
         checkbox.addEventListener('change', () => {
             const tarefaGlobal = tarefas.find(t => t.id === tarefa.id);
@@ -264,10 +290,23 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
             renderizarTarefas(); 
         });
 
+        // Evento: Abrir modo Edição
+        card.querySelector('.btn-editar-tarefa').addEventListener('click', () => {
+            const tarefaGlobal = tarefas.find(t => t.id === tarefa.id);
+            if (tarefaGlobal) {
+                document.getElementById('select-materia').value = tarefaGlobal.disciplina;
+                document.getElementById('input-titulo').value = tarefaGlobal.detalhe;
+                document.getElementById('input-data').value = tarefaGlobal.data || ''; // Puxa vazio se não tiver data
+                
+                idEdicaoTarefa = tarefaGlobal.id; // Marca que estamos editando
+                document.querySelector('#modal-nova-tarefa h2').textContent = "Editar Tarefa ✏️";
+                abrirModal();
+            }
+        });
+
         elementoGrid.appendChild(card);
     });
 }
-
 // ---------------------------------------------
 // SISTEMA DE LEMBRETES (Independente)
 // ---------------------------------------------
@@ -404,28 +443,56 @@ btnOrdenar.addEventListener('click', () => {
 });
 
 function abrirModal() { modalOverlay.classList.remove('oculto'); }
-function fecharModal() { modalOverlay.classList.add('oculto'); formTarefa.reset(); }
+function fecharModal() { 
+    modalOverlay.classList.add('oculto'); 
+    formTarefa.reset(); 
+    idEdicaoTarefa = null; // Limpa o ID de edição
+    document.querySelector('#modal-nova-tarefa h2').textContent = "Nova Tarefa"; // Reseta o título
+}
 
 btnAbrirModal.addEventListener('click', abrirModal);
 btnCancelarModal.addEventListener('click', fecharModal);
 
-// 2. Atualize a função de Submissão do Formulário
 formTarefa.addEventListener('submit', function(evento) {
     evento.preventDefault(); 
     const selectMateria = document.getElementById('select-materia');
     const materia = selectMateria ? selectMateria.value : "Pessoal";
     const titulo = document.getElementById('input-titulo').value;
-    const data = document.getElementById('input-data').value;
+    const data = document.getElementById('input-data').value; // Agora pode vir vazio
 
-    tarefas.push({
-        id: Date.now(),
-        disciplina: materia,
-        detalhe: titulo,
-        data: data,
-        concluida: false
-    });
+    // 1. Validação de Segurança: Checa se a data informada já passou
+    if (data) {
+        const dataEscolhida = new Date(data + 'T00:00:00');
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0); 
+        
+        if (dataEscolhida < hoje) {
+            const confirmacao = confirm("Kuromi says: Hello! Essa data já passou. Vai mesmo colocar tarefa atrasada na minha frente? 🚨");
+            if (!confirmacao) return; // Se ela clicar em Cancelar, o código para aqui
+        }
+    }
 
-    salvarTarefas(); // SALVA NO BANCO
+    // 2. Lógica de Salvar: É uma Edição ou uma Nova Tarefa?
+    if (idEdicaoTarefa) {
+        // Encontra a tarefa existente e atualiza os dados
+        const index = tarefas.findIndex(t => t.id === idEdicaoTarefa);
+        if (index !== -1) {
+            tarefas[index].disciplina = materia;
+            tarefas[index].detalhe = titulo;
+            tarefas[index].data = data;
+        }
+    } else {
+        // Cria uma nova tarefa do zero
+        tarefas.push({
+            id: Date.now(),
+            disciplina: materia,
+            detalhe: titulo,
+            data: data,
+            concluida: false
+        });
+    }
+
+    salvarTarefas(); 
     renderizarTarefas();
     fecharModal();
 });
@@ -618,20 +685,6 @@ inputImportar.addEventListener('change', (event) => {
     leitor.readAsText(arquivo);
 });
 
-const btnDark = document.getElementById('toggle-dark');
-// Verifica se já estava no dark mode antes
-if (localStorage.getItem('kuromi_tema') === 'dark') {
-    document.body.classList.add('dark-mode');
-    btnDark.textContent = "☀️";
-}
-
-btnDark.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem('kuromi_tema', isDark ? 'dark' : 'light');
-    btnDark.textContent = isDark ? "☀️" : "🌙";
-});
-
 // ==========================================
 // MÓDULO: MODO FOCO E RÁDIO KUROMI
 // ==========================================
@@ -708,7 +761,7 @@ function atualizarKuromi() {
     // Lógica Dinâmica baseada no Humor e na Hora
     if (humorAtual === 'estressada') {
         imagem = 'imgs/Kuromi-rightPeek.png'; 
-        mensagem = "Respira fundo, Lara! Que tal ligar o Modo Foco e colocar a nossa Rádio Lofi tocar? 🎧";
+        mensagem = "Respira fundo, Lara! Que tal ligar o Modo Foco e colocar a nossa Rádio Lofi para tocar? 🎧";
     } else if (humorAtual === 'cansada') {
         imagem = 'imgs/Kuromi_walking.png'; 
         mensagem = "Se está exausta, faça apenas o essencial hoje. Descansar também é ser produtiva! 💤";
@@ -720,7 +773,7 @@ function atualizarKuromi() {
         if (hora >= 5 && hora < 12) {
             mensagem = "Bom dia, flor do dia! O café já está pronto? Vamos conquistar o mundo hoje! ☕";
         } else if (hora >= 12 && hora < 18) {
-            mensagem = "Boa tarde! Continue firme, você está indo muito bem! 🚀";
+            mensagem = "Boa tarde! Continue firme, você está indo muito bem! ^-^";
         } else if (hora >= 18 && hora < 23) {
             mensagem = "Boa noite! Quase na hora de descansar essa mente brilhante. 🌙";
         } else {
@@ -751,55 +804,3 @@ botoesHumor.forEach(btn => {
 
 // Inicializa
 renderizarHumor();
-
-// ==========================================
-// MÓDULO: FOTO DE PERFIL (AVATAR)
-// ==========================================
-const imgAvatar = document.getElementById('avatar-img');
-const inputAvatar = document.getElementById('input-avatar');
-
-if (imgAvatar && inputAvatar) {
-    // 1. Carrega a imagem salva ou a padrão da Kuromi
-    const avatarSalvo = localStorage.getItem('kuromi_avatar');
-    if (avatarSalvo) {
-        imgAvatar.src = avatarSalvo;
-    } else {
-        imgAvatar.src = 'imgs/cool-kuromi.jpg'; // A imagem padrão se não houver nenhuma
-    }
-
-    // 2. Clicar no avatar abre a janela para escolher um arquivo
-    imgAvatar.parentElement.addEventListener('click', () => {
-        inputAvatar.click();
-    });
-
-    // 3. Quando escolher um arquivo, converte para Base64 e salva
-    inputAvatar.addEventListener('change', (e) => {
-        const arquivo = e.target.files[0];
-        
-        if (arquivo) {
-            // Trava de segurança: O localStorage tem um limite de espaço (~5MB). 
-            // Bloqueamos fotos gigantes para não corromper o arquivo de backup.
-            if (arquivo.size > 2 * 1024 * 1024) { // 2 Megabytes
-                alert("Essa foto é muito pesada! Escolha uma imagem com menos de 2MB. 💜");
-                return;
-            }
-
-            const leitor = new FileReader();
-            leitor.onload = (eventoBase64) => {
-                const base64String = eventoBase64.target.result;
-                
-                // Atualiza a imagem na tela
-                imgAvatar.src = base64String;
-                
-                // Salva no "Cofre" do navegador
-                localStorage.setItem('kuromi_avatar', base64String);
-                
-                // Dispara purpurina de comemoração
-                criarPurpurina(window.innerWidth / 2, window.innerHeight / 2);
-            };
-            
-            // Inicia a leitura do arquivo como uma URL de Dados (Base64)
-            leitor.readAsDataURL(arquivo);
-        }
-    });
-}
