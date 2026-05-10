@@ -25,7 +25,12 @@
                     </script>
                     <input type="file" id="input-avatar" accept="image/*" style="display: none;">
                 </div>
-                <h2>Oie, Lara! 💜  <button id="toggle-dark" class="btn-tema">🌙</button></h2>
+                <h2>Oie, Lara! 💜  
+                    <label class="switch-tema" title="Alternar Modo Escuro">
+                        <input type="checkbox" id="toggle-dark-checkbox">
+                        <span class="slider-tema"></span>
+                    </label>
+                </h2>
             </div>
             
             <nav class="menu-navegacao">
@@ -86,7 +91,7 @@
 
         <aside class="painel-widgets">
             <div class="widget caixa-com-adesivo">
-                <h3 style="margin-bottom: 10px;">Buscar ✨</h3>
+                <h3 style="margin-bottom: 10px;">Buscar 🔎</h3>
                 <div class="grupo-input" style="margin-bottom: 0;">
                     <input type="text" id="input-busca" placeholder="Digite para filtrar..." style="width: 100%;">
                 </div>

@@ -652,64 +652,6 @@ btnMenuArquivo.addEventListener('click', () => {
 });
 
 // ==========================================
-// MÓDULO: COFRE DA KUROMI (BACKUP)
-// ==========================================
-
-const btnExportar = document.getElementById('btn-exportar');
-const btnImportarTrigger = document.getElementById('btn-importar-trigger');
-const inputImportar = document.getElementById('input-importar');
-
-// 1. FUNÇÃO EXPORTAR: Pega TUDO do localStorage e cria um arquivo JSON
-btnExportar.addEventListener('click', () => {
-    const todosDados = {};
-    // Percorre todas as chaves salvas no navegador
-    for (let i = 0; i < localStorage.length; i++) {
-        const chave = localStorage.key(i);
-        todosDados[chave] = localStorage.getItem(chave);
-    }
-
-    const dataSnapshot = JSON.stringify(todosDados, null, 2);
-    const blob = new Blob([dataSnapshot], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    // Cria um link temporário para download
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `backup_kuromi_${new Date().toLocaleDateString()}.json`;
-    link.click();
-    
-    URL.revokeObjectURL(url);
-    alert("Backup concluído! Guarde seu arquivo JSON com carinho. 💜");
-});
-
-// 2. FUNÇÃO IMPORTAR: Lê o JSON e sobrescreve o localStorage
-btnImportarTrigger.addEventListener('click', () => inputImportar.click());
-
-inputImportar.addEventListener('change', (event) => {
-    const arquivo = event.target.files[0];
-    if (!arquivo) return;
-
-    const leitor = new FileReader();
-    leitor.onload = (e) => {
-        try {
-            const dadosImportados = JSON.parse(e.target.result);
-            
-            if (confirm("Isso irá substituir todos os dados atuais por este backup. Continuar?")) {
-                localStorage.clear(); // Limpa o atual
-                for (const chave in dadosImportados) {
-                    localStorage.setItem(chave, dadosImportados[chave]);
-                }
-                alert("Dados restaurados com sucesso! A página irá recarregar.");
-                window.location.reload(); // Recarrega para aplicar as mudanças
-            }
-        } catch (erro) {
-            alert("Erro ao ler o arquivo. Verifique se é um backup válido da Kuromi.");
-        }
-    };
-    leitor.readAsText(arquivo);
-});
-
-// ==========================================
 // MÓDULO: MODO FOCO E RÁDIO KUROMI
 // ==========================================
 const btnZen = document.getElementById('btn-zen');

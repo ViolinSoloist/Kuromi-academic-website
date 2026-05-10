@@ -1,16 +1,17 @@
-// --- INICIALIZAÇÃO DE TEMA ---
+// --- INICIALIZAÇÃO DE TEMA (NOVO TOGGLE) ---
 function aplicarTema() {
-    const btnDark = document.getElementById('toggle-dark');
+    const checkboxDark = document.getElementById('toggle-dark-checkbox');
     
-    if (btnDark) {
-        // Apenas acerta o ícone do botão com base no que o script HTML já fez
-        btnDark.textContent = document.body.classList.contains('dark-mode') ? "☀️" : "🌙";
+    if (checkboxDark) {
+        // 1. Sincroniza visualmente: se o script anti-flashbang (do HTML) 
+        // já ativou o dark mode, o switch deve aparecer marcado.
+        checkboxDark.checked = document.body.classList.contains('dark-mode');
 
-        btnDark.onclick = () => {
+        // 2. Escuta a mudança do interruptor
+        checkboxDark.onchange = () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('kuromi_tema', isDark ? 'dark' : 'light');
-            btnDark.textContent = isDark ? "☀️" : "🌙";
         };
     }
 }

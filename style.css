@@ -1344,3 +1344,66 @@ body.dark-mode .card-tarefa.atrasada {
     color: var(--roxo-kuromi-escuro);
     line-height: 1.5;
 }
+
+/* ==========================================
+   ESTILOS DO NOVO TOGGLE DE TEMA (SWITCH)
+========================================== */
+.switch-tema {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* Esconde o checkbox real do navegador */
+.switch-tema input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* O fundo do interruptor */
+.slider-tema {
+    position: absolute;
+    cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--roxo-kuromi-suave);
+    transition: 0.4s;
+    border-radius: 34px;
+    border: 2px solid var(--roxo-kuromi-escuro);
+}
+
+/* A "bolinha" que desliza */
+.slider-tema:before {
+    position: absolute;
+    content: "☀️";
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--branco-puro);
+    transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Quando o checkbox estiver marcado (Modo Escuro) */
+input:checked + .slider-tema {
+    background-color: var(--roxo-kuromi-escuro);
+}
+
+/* Move a bolinha para a direita e muda o ícone */
+input:checked + .slider-tema:before {
+    transform: translateX(24px);
+    content: "🌙";
+    background-color: var(--fundo-principal);
+}
