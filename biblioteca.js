@@ -64,7 +64,7 @@ function renderizarLeituras() {
     if (leituras.length === 0) {
         containerLeituras.innerHTML = `
             <div class="estado-vazio">
-                <img src="imgs/Kuromi-top2.png" alt="Sem leituras">
+                <img src="imgs/hellokitty-read.png" alt="Sem leituras">
                 <p>Sua estante está vazia! 📖<br>Que tal adicionar um livro ou artigo novo?</p>
             </div>
         `;

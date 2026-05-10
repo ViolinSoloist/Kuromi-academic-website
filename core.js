@@ -6,19 +6,23 @@
 // --- INICIALIZAÇÃO DE TEMA ---
 function aplicarTema() {
     const btnDark = document.getElementById('toggle-dark');
+    
+    // 1. Aplica o tema salvo ao carregar a página
     if (localStorage.getItem('kuromi_tema') === 'dark') {
         document.body.classList.add('dark-mode');
         if (btnDark) btnDark.textContent = "☀️";
     }
-    // Adicione isso no final do seu core.js
-    document.addEventListener('click', (e) => {
-        if (e.target && e.target.id === 'toggle-dark') {
+
+    // 2. Garante que o evento de clique seja adicionado direto no botão
+    if (btnDark) {
+        // Usamos onclick (ao invés de addEventListener) para evitar duplicações se a função rodar 2x
+        btnDark.onclick = () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('kuromi_tema', isDark ? 'dark' : 'light');
-            e.target.textContent = isDark ? "☀️" : "🌙";
-        }
-    });
+            btnDark.textContent = isDark ? "☀️" : "🌙";
+        };
+    }
 }
 
 // --- LÓGICA DO AVATAR ---
@@ -48,12 +52,6 @@ function inicializarAvatar() {
         }
     }
 }
-
-// Executa ao carregar qualquer página
-document.addEventListener('DOMContentLoaded', () => {
-    aplicarTema();
-    inicializarAvatar();
-});
 
 // ==========================================
 // MÓDULO: COFRE DA KUROMI E RESET (GLOBAL)

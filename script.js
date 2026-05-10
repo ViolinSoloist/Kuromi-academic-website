@@ -140,24 +140,74 @@ function renderizarTarefas(animarOrdem = false) {
 
     let tarefasParaExibir = [];
     
-    if (visualizacaoAtual === 'semana') {
-        tarefasParaExibir = tarefas.filter(t => ehDestaSemana(t.data));
-    } else if (visualizacaoAtual === 'todas') {
-        tarefasParaExibir = [...tarefas].sort((a, b) => new Date(a.data) - new Date(b.data));
+    // --- PASSO 1: POPULAR O ARRAY COM AS TAREFAS CORRETAS ---
+    if (visualizacaoAtual === 'todas') {
+        tarefasParaExibir = [...tarefas]; // Copia todas as tarefas
+    } else if (visualizacaoAtual === 'semana') {
+        // Pega as tarefas que têm data E que pertencem a esta semana
+        tarefasParaExibir = tarefas.filter(t => t.data && ehDestaSemana(t.data));
     } else if (visualizacaoAtual === 'dia') {
         const dataDeHoje = new Date();
         const dataLocal = new Date(dataDeHoje.getTime() - (dataDeHoje.getTimezoneOffset() * 60000));
         const dataString = dataLocal.toISOString().split('T')[0];
-        
         tarefasParaExibir = tarefas.filter(t => t.data === dataString);
+    }
 
-        // --- INÍCIO DA LÓGICA EXCLUSIVA DO DIA ---
-        const headerDia = document.createElement('div');
-        headerDia.classList.add('header-dia');
+    // --- PASSO 2: RENDERIZAR A TELA ---
+    if (visualizacaoAtual === 'semana') {
+        if (tarefasParaExibir.length === 0) {
+            containerTarefas.innerHTML = `
+                <div class="estado-vazio">
+                    <img src="imgs/kuromi_sleep.png" class="kuromi-sleep-img" alt="Semana livre">
+                    <p>Semana livre! 💜<br>Aproveite para descansar ou adiantar os seus hobbies (dormir).</p>
+                </div>
+            `;
+            atualizarGraficoProgresso();
+            return;
+        }
+
+        const gridUnico = document.createElement('div');
+        gridUnico.classList.add('grid-tarefas-isolado');
+        preencherGrid(gridUnico, tarefasParaExibir, animarOrdem, false);
+        containerTarefas.appendChild(gridUnico);
         
+        instanciasSortableTarefas.push(ativarSortable(gridUnico));
+
+    } else if (visualizacaoAtual === 'todas') {
+        if (tarefasParaExibir.length === 0) {
+            containerTarefas.innerHTML = `
+                <div class="estado-vazio">
+                    <img src="imgs/Kuromi_yell.png" style="width: clamp(120px, 10vw, 10vw)" alt="Sem tarefas">
+                    <p>Sem nada para fazer... Que inveja!</p>
+                </div>
+            `;
+            atualizarGraficoProgresso();
+            return;
+        }
+
+        const gruposMes = agruparPorMes(tarefasParaExibir);
+        for (const [mes, tarefasMes] of Object.entries(gruposMes)) {
+            const divisor = document.createElement('div');
+            divisor.classList.add('divisor-mes');
+            divisor.innerHTML = `<span>${mes}</span>`;
+            containerTarefas.appendChild(divisor);
+
+            const gridMes = document.createElement('div');
+            gridMes.classList.add('grid-tarefas-isolado');
+            preencherGrid(gridMes, tarefasMes, animarOrdem, false);
+            containerTarefas.appendChild(gridMes);
+
+            instanciasSortableTarefas.push(ativarSortable(gridMes));
+        }
+
+    } else if (visualizacaoAtual === 'dia') {
+        const dataDeHoje = new Date();
         const opcoesData = { weekday: 'long', day: 'numeric', month: 'long' };
         let dataFormatada = dataDeHoje.toLocaleDateString('pt-BR', opcoesData);
 
+        const headerDia = document.createElement('div');
+        headerDia.classList.add('header-dia');
+        
         headerDia.innerHTML = `
             <h2>${dataFormatada}</h2>
             <div class="container-interativo">
@@ -186,58 +236,27 @@ function renderizarTarefas(animarOrdem = false) {
             .catch(() => {
                 document.getElementById('fato-curioso').textContent = "Hoje é um dia maravilhoso para focar em você! 💜";
             });
-            if (tarefasParaExibir.length === 0) {
-                const semTarefas = document.createElement('p');
-                semTarefas.style = "text-align: center; opacity: 0.6; font-weight: bold; margin-top: 40px;";
-                semTarefas.textContent = "Nenhuma tarefa pra hoje! A Kuromi diz pra você ir descansar 💜";
-                containerTarefas.appendChild(semTarefas);
-            } else {
-                const gridUnico = document.createElement('div');
-                gridUnico.classList.add('grid-dia-expandido'); 
-                preencherGrid(gridUnico, tarefasParaExibir, animarOrdem, true); 
-                containerTarefas.appendChild(gridUnico);
-                
-                // Adiciona o motor isolado ao array correto
-                instanciasSortableTarefas.push(ativarSortable(gridUnico));
-            }
-            
-        atualizarKuromi();
-        atualizarGraficoProgresso();
-        return; 
-    }
 
-    if (visualizacaoAtual === 'todas') {
-        const gruposMes = agruparPorMes(tarefasParaExibir);
-        for (const [mes, tarefasMes] of Object.entries(gruposMes)) {
-            const divisor = document.createElement('div');
-            divisor.classList.add('divisor-mes');
-            divisor.innerHTML = `<span>${mes}</span>`;
-            containerTarefas.appendChild(divisor);
-
-            const gridMes = document.createElement('div');
-            gridMes.classList.add('grid-tarefas-isolado');
-            preencherGrid(gridMes, tarefasMes, animarOrdem, false);
-            containerTarefas.appendChild(gridMes);
-
-            instanciasSortableTarefas.push(ativarSortable(gridMes));
-        }
-    } else if (visualizacaoAtual === 'semana') {
         if (tarefasParaExibir.length === 0) {
-            containerTarefas.innerHTML = '<p style="text-align: center; opacity: 0.6; font-weight: bold; margin-top: 40px;">Semana livre! 💜</p>';
-            atualizarGraficoProgresso();
-            return;
+            const semTarefas = document.createElement('p');
+            semTarefas.style = "text-align: center; opacity: 0.6; font-weight: bold; margin-top: 40px;";
+            semTarefas.textContent = "Nenhuma tarefa pra hoje! A Kuromi diz pra você ir descansar 💜";
+            containerTarefas.appendChild(semTarefas);
+        } else {
+            const gridUnico = document.createElement('div');
+            gridUnico.classList.add('grid-dia-expandido'); 
+            preencherGrid(gridUnico, tarefasParaExibir, animarOrdem, true); 
+            containerTarefas.appendChild(gridUnico);
+            
+            instanciasSortableTarefas.push(ativarSortable(gridUnico));
         }
-
-        const gridUnico = document.createElement('div');
-        gridUnico.classList.add('grid-tarefas-isolado');
-        preencherGrid(gridUnico, tarefasParaExibir, animarOrdem, false);
-        containerTarefas.appendChild(gridUnico);
         
-        instanciasSortableTarefas.push(ativarSortable(gridUnico));
+        atualizarKuromi();
     }
-
+    
     atualizarGraficoProgresso();
 }
+
 function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
     lista.forEach((tarefa, index) => {
         const card = document.createElement('div');
@@ -755,6 +774,7 @@ if (btnResetMaster) {
 
 function atualizarKuromi() {
     const imgKuromi = document.getElementById('kuromi-interativa-img');
+    imgKuromi.classList.remove('kuromi-sleep-img');
     const falaKuromi = document.getElementById('kuromi-interativa-fala');
     
     if (!imgKuromi || !falaKuromi) return; // Só tenta atualizar se a visão do 'Dia' estiver aberta
@@ -765,10 +785,11 @@ function atualizarKuromi() {
 
     // Lógica Dinâmica baseada no Humor e na Hora
     if (humorAtual === 'estressada') {
-        imagem = 'imgs/Kuromi-rightPeek.png'; 
+        imagem = 'imgs/moosic.png'; 
         mensagem = "Respira fundo, Lara! Que tal ligar o Modo Foco e colocar a nossa Rádio Lofi para tocar? 🎧";
     } else if (humorAtual === 'cansada') {
-        imagem = 'imgs/Kuromi_walking.png'; 
+        imagem = 'imgs/kuromi_sleep.png';
+        imgKuromi.classList.add("kuromi-sleep-img");
         mensagem = "Se está exausta, faça apenas o essencial hoje. Descansar também é ser produtiva! 💤";
     } else if (humorAtual === 'foco') {
         imagem = 'imgs/kuromi_skate.png';
@@ -780,10 +801,10 @@ function atualizarKuromi() {
         } else if (hora >= 12 && hora < 18) {
             mensagem = "Boa tarde! Continue firme, você está indo muito bem! ^-^";
         } else if (hora >= 18 && hora < 23) {
-            mensagem = "Boa noite! Quase na hora de descansar essa mente brilhante. 🌙";
+            mensagem = "Boa noite! Tá quase na hora de descansar diva 💅";
         } else {
             mensagem = "Lara, vai dormir! A faculdade não vale as suas olheiras. Desliga isso agora! 🦉";
-            imagem = 'imgs/Kuromi-rightPeek.png'; // Kuromi dando bronca
+            imagem = 'imgs/hellokittyknife.png'; // Kuromi dando bronca
         }
     }
 
