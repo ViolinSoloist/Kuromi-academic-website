@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <script>
+        if (localStorage.getItem('kuromi_tema') === 'dark') document.body.classList.add('dark-mode');        
+    </script>
 
     <div class="dashboard-container">
         
@@ -14,6 +17,10 @@
             <div class="perfil-usuario">
                 <div class="avatar-container" title="Mudar foto de perfil">
                     <img id="avatar-img" src="imgs/kuromi_bleh.png" class="avatar-placeholder" alt="Foto de Perfil">
+                    <script>
+                        const avatarSalvoHTML = localStorage.getItem('kuromi_avatar');
+                        if (avatarSalvoHTML) document.getElementById('avatar-img').src = avatarSalvoHTML;
+                    </script>
                     <input type="file" id="input-avatar" accept="image/*" style="display: none;">
                 </div>
                 <h2>Oie, Lara! 💜  <button id="toggle-dark" class="btn-tema">🌙</button></h2>

@@ -1,21 +1,11 @@
-/**
- * CORE.JS - Funções Globais da Kuromi
- * Este arquivo contém lógicas que funcionam em todas as páginas.
- */
-
 // --- INICIALIZAÇÃO DE TEMA ---
 function aplicarTema() {
     const btnDark = document.getElementById('toggle-dark');
     
-    // 1. Aplica o tema salvo ao carregar a página
-    if (localStorage.getItem('kuromi_tema') === 'dark') {
-        document.body.classList.add('dark-mode');
-        if (btnDark) btnDark.textContent = "☀️";
-    }
-
-    // 2. Garante que o evento de clique seja adicionado direto no botão
     if (btnDark) {
-        // Usamos onclick (ao invés de addEventListener) para evitar duplicações se a função rodar 2x
+        // Apenas acerta o ícone do botão com base no que o script HTML já fez
+        btnDark.textContent = document.body.classList.contains('dark-mode') ? "☀️" : "🌙";
+
         btnDark.onclick = () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
@@ -147,10 +137,34 @@ function inicializarHumor() {
     renderizarHumor();
 }
 
-// Atualize o event listener no final do core.js para chamar essas funções!
-document.addEventListener('DOMContentLoaded', () => {
-    aplicarTema();
-    inicializarAvatar();
-    inicializarCofre(); // Inicia o backup e reset
-    inicializarHumor(); // Inicia o humor
-});
+// --- INICIALIZAÇÃO IMEDIATA ---
+// Como este arquivo é chamado no final do <body>, não precisamos esperar o DOMContentLoaded
+aplicarTema();
+inicializarAvatar();
+inicializarCofre(); 
+inicializarHumor(); 
+precarregarImagens(); // Chama o download fantasma das imagens!
+
+// ==========================================
+// MÓDULO: PRÉ-CARREGAMENTO DE IMAGENS
+// ==========================================
+function precarregarImagens() {
+    const imagens = [
+        'imgs/kuromi_bleh.png',
+        'imgs/kuromi_sleep.png',
+        'imgs/kuromi_skate.png',
+        'imgs/moosic.png',
+        'imgs/hellokittyknife.png',
+        'imgs/Kuromi_yell.png',
+        'imgs/Kuromi_walking.png',
+        'imgs/sus.png',
+        'imgs/night1.jpg', // Garante que o fundo escuro carregue rápido
+        'imgs/hellokitty-read.png'
+    ];
+    
+    // O navegador baixa a imagem na memória (cache) em segundo plano
+    imagens.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+}
