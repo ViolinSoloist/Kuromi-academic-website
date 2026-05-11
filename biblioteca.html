@@ -25,7 +25,9 @@
                     </script>
                     <input type="file" id="input-avatar" accept="image/*" style="display: none;">
                 </div>
-                <h2>Oie, Lara! 💜  
+                <h2>
+                    <span id="nome-usuario" title="Clique para editar seu nome" style="cursor: url('imgs/kuromi-pointer.png') 0 0, pointer; transition: opacity 0.2s;">Oie, Kuromi! 💜</span>
+                    
                     <label class="switch-tema" title="Alternar Modo Escuro">
                         <input type="checkbox" id="toggle-dark-checkbox">
                         <span class="slider-tema"></span>
@@ -44,13 +46,6 @@
 
             <div class="configuracoes-sidebar">
                 <hr style="opacity: 0.2; margin: 20px 0;">
-                <div class="perfil-seletor">
-                    <label style="font-size: 0.7rem; opacity: 0.7;">Perfil Atual:</label>
-                    <select id="select-perfil-global">
-                        <option value="Lara">Lara 💜</option>
-                        <option value="Convidado">Convidado ✨</option>
-                    </select>
-                </div>
                 
                 <div class="botoes-backup">
                     <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>

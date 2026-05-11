@@ -144,7 +144,44 @@ aplicarTema();
 inicializarAvatar();
 inicializarCofre(); 
 inicializarHumor(); 
+inicializarNomeUsuario();
 precarregarImagens(); // Chama o download fantasma das imagens!
+
+// ==========================================
+// MÓDULO: NOME DE USUÁRIO EDITÁVEL
+// ==========================================
+function inicializarNomeUsuario() {
+    const spanNome = document.getElementById('nome-usuario');
+    
+    if (spanNome) {
+        // 1. Tenta buscar o nome salvo no cofre (localStorage)
+        const nomeSalvo = localStorage.getItem('kuromi_nome');
+        
+        // 2. Se existir, escreve o nome salvo. Se não, deixa apenas o nome. 
+        // Nota: O HTML já começa com "Oie, Kuromi! 💜" como fallback padrão.
+        if (nomeSalvo) {
+            spanNome.textContent = `Oie, ${nomeSalvo}! 💜`;
+        }
+
+        // 3. Adiciona o evento de clique para permitir a edição
+        spanNome.addEventListener('click', () => {
+            // Abre uma caixinha de pergunta (prompt)
+            // Se já tiver nome salvo, ele aparece preenchido. Se não, fica em branco.
+            const novoNome = prompt("Qual é o seu nome? 💜", nomeSalvo || "");
+            
+            // Verifica se a pessoa digitou algo e não clicou em "Cancelar"
+            if (novoNome !== null && novoNome.trim() !== "") {
+                const nomeLimpo = novoNome.trim(); // Tira espaços em branco extras
+                localStorage.setItem('kuromi_nome', nomeLimpo); // Salva no cofre
+                spanNome.textContent = `Oie, ${nomeLimpo}! 💜`; // Atualiza na tela na hora
+            }
+        });
+
+        // Efeito visual fofo ao passar o mouse
+        spanNome.addEventListener('mouseenter', () => spanNome.style.opacity = '0.7');
+        spanNome.addEventListener('mouseleave', () => spanNome.style.opacity = '1');
+    }
+}
 
 // ==========================================
 // MÓDULO: PRÉ-CARREGAMENTO DE IMAGENS

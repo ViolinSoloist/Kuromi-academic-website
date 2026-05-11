@@ -738,7 +738,7 @@ function atualizarKuromi() {
         mensagem = "Olhar de predadora! Vamos gabaritar essas tarefas e dominar o mundo. 🎯";
     } else {
         // Se estiver "Feliz" (ou por padrão), reage à hora do dia
-        if (hora >= 5 && hora < 12) {
+        if (hora >= 6 && hora < 12) {
             mensagem = "Bom dia, flor do dia! O café já está pronto? Vamos conquistar o mundo hoje! ☕";
         } else if (hora >= 12 && hora < 18) {
             mensagem = "Boa tarde! Continue firme, você está indo muito bem! ^-^";
