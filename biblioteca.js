@@ -1,4 +1,4 @@
-// 1. Variáveis Globais e Base de Dados
+// variáveis Globais e Base de Dados
 let leituras = JSON.parse(localStorage.getItem('kuromi_leituras')) || [];
 const disciplinasSalvas = JSON.parse(localStorage.getItem('kuromi_disciplinas')) || [];
 let idEdicaoLeitura = null;
@@ -10,7 +10,7 @@ const btnNovaLeitura = document.getElementById('btn-nova-leitura');
 const btnCancelarLeitura = document.getElementById('btn-cancelar-leitura');
 const selectMateria = document.getElementById('select-materia-leitura');
 
-// 2. Preencher Dropdown de Disciplinas (O mesmo padrão do Dashboard)
+// preencher dropdown de disciplinas (mesmo em Dashboard)
 disciplinasSalvas.forEach(disc => {
     const opcao = document.createElement('option');
     opcao.value = disc.nome;
@@ -26,7 +26,7 @@ function salvarLeituras() {
     localStorage.setItem('kuromi_leituras', JSON.stringify(leituras));
 }
 
-// 3. Atualizar Widgets Laterais
+// update widgets
 function atualizarWidgetsLeitura() {
     let totalPaginasLidas = 0;
     let leiturasEmAndamento = [];
@@ -38,13 +38,13 @@ function atualizarWidgetsLeitura() {
         }
     });
 
-    // Atualiza o totalizador
+    // update total de paǵinas
     document.getElementById('display-paginas-lidas').textContent = totalPaginasLidas;
 
-    // Atualiza o Widget de Leitura Atual
+    // update leitura atuall
     const displayAtual = document.getElementById('display-leitura-atual');
     if (leiturasEmAndamento.length > 0) {
-        // Mostra o livro que ela atualizou mais recentemente ou tem maior foco
+        // show: livro de maior foco ou atualizou recentemente
         const atual = leiturasEmAndamento[0]; 
         const progresso = Math.round((atual.paginasLidas / atual.totalPaginas) * 100);
         displayAtual.innerHTML = `
@@ -56,11 +56,11 @@ function atualizarWidgetsLeitura() {
     }
 }
 
-// 4. Renderizar os Cards da Biblioteca
+// renderuzar cards de biblioteca
 function renderizarLeituras() {
     containerLeituras.innerHTML = '';
 
-    // --- NOVA LÓGICA DE ESTADO VAZIO ---
+    // if empty
     if (leituras.length === 0) {
         containerLeituras.innerHTML = `
             <div class="estado-vazio">
@@ -69,7 +69,7 @@ function renderizarLeituras() {
             </div>
         `;
         atualizarWidgetsLeitura();
-        return; // Interrompe a função aqui
+        return;
     }
     // -----------------------------------
 
@@ -77,10 +77,10 @@ function renderizarLeituras() {
         const card = document.createElement('div');
         card.classList.add('card-leitura');
 
-        // Cálculo de Progresso
+        // calcula progresso
         const porcentagem = Math.min(Math.round((livro.paginasLidas / livro.totalPaginas) * 100), 100);
         
-        // Definição de Status
+        // definição status
         let statusClasse = 'status-pendente';
         let statusTexto = 'Não Iniciado';
         if (porcentagem > 0 && porcentagem < 100) {
@@ -122,7 +122,8 @@ function renderizarLeituras() {
             </div>
         `;
 
-        // Evento: Adicionar 10 páginas rápido
+        // ----------------- EVENTOS  ---------------------------
+        // quick +10 pages increment
         card.querySelector('.btn-add-pagina').addEventListener('click', () => {
             if (livro.paginasLidas + 10 <= livro.totalPaginas) {
                 livro.paginasLidas += 10;
@@ -133,7 +134,7 @@ function renderizarLeituras() {
             renderizarLeituras();
         });
 
-        // Evento: Editar
+        // editar
         card.querySelector('.btn-editar').addEventListener('click', () => {
             idEdicaoLeitura = livro.id;
             document.getElementById('select-materia-leitura').value = livro.disciplina;
@@ -146,7 +147,7 @@ function renderizarLeituras() {
             modalLeitura.classList.remove('oculto');
         });
 
-        // Evento: Deletar
+        // delete
         card.querySelector('.btn-deletar').addEventListener('click', () => {
             if(confirm("Excluir esta leitura da biblioteca?")) {
                 leituras = leituras.filter(l => l.id !== livro.id);
@@ -161,7 +162,7 @@ function renderizarLeituras() {
     atualizarWidgetsLeitura();
 }
 
-// 5. Eventos do Formulário
+// ------------------------ EVENTOS FORMULÁRIO ------------------------
 btnNovaLeitura.addEventListener('click', () => modalLeitura.classList.remove('oculto'));
 
 btnCancelarLeitura.addEventListener('click', () => {
@@ -208,7 +209,7 @@ formLeitura.addEventListener('submit', (e) => {
     modalLeitura.querySelector('h2').textContent = "Nova Leitura 📚";
 });
 
-// Inicializar a página
+// inicializa página
 renderizarLeituras();
 
 // ================
@@ -217,7 +218,7 @@ renderizarLeituras();
 const btnResetMaster = document.getElementById('btn-reset-master');
 if (btnResetMaster) {
     btnResetMaster.addEventListener('click', () => {
-        if (confirm("🚨 ATENÇÃO! Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
+        if (confirm("Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
             // Limpa o banco de dados inteiro do navegador
             localStorage.clear();
             alert("Tudo foi apagado. A Kuromi varreu a casa! O site será recarregado do zero. 🧹✨");
@@ -238,9 +239,9 @@ if (inputBuscaLib) {
             const titulo = card.querySelector('.leitura-titulo').textContent.toLowerCase();
             const disciplina = card.querySelector('.disciplina-badge').textContent.toLowerCase();
             
-            // Procura tanto no título do livro quanto na disciplina!
+            // procura tanto no título do livro quanto na disciplina
             if (titulo.includes(termo) || disciplina.includes(termo)) {
-                card.style.display = 'flex'; // O card da biblioteca usa flex
+                card.style.display = 'flex'; // card da biblioteca usa flex
             } else {
                 card.style.display = 'none';
             }

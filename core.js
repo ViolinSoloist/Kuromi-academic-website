@@ -1,13 +1,12 @@
-// --- INICIALIZAÇÃO DE TEMA (NOVO TOGGLE) ---
+// ---------- INICIALIZAÇÃO DE TEMA (sincroniza com toggle) ------------------
 function aplicarTema() {
     const checkboxDark = document.getElementById('toggle-dark-checkbox');
     
     if (checkboxDark) {
-        // 1. Sincroniza visualmente: se o script anti-flashbang (do HTML) 
-        // já ativou o dark mode, o switch deve aparecer marcado.
+        // se for tema escuro, botão toggle aparece como tal
         checkboxDark.checked = document.body.classList.contains('dark-mode');
 
-        // 2. Escuta a mudança do interruptor
+        // LISTEN: TOGGLE
         checkboxDark.onchange = () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
@@ -16,7 +15,7 @@ function aplicarTema() {
     }
 }
 
-// --- LÓGICA DO AVATAR ---
+// ---------- AVATAR -------------------
 function inicializarAvatar() {
     const imgAvatar = document.getElementById('avatar-img');
     const avatarSalvo = localStorage.getItem('kuromi_avatar');
@@ -24,7 +23,7 @@ function inicializarAvatar() {
     if (imgAvatar) {
         imgAvatar.src = avatarSalvo || 'imgs/cool-kuromi.jpg';
         
-        // Se houver um input de arquivo, ativa a troca
+        // if (input de arquivo) { ativa a troca }
         const inputAvatar = document.getElementById('input-avatar');
         if (inputAvatar) {
             imgAvatar.parentElement.onclick = () => inputAvatar.click();
@@ -45,7 +44,7 @@ function inicializarAvatar() {
 }
 
 // ==========================================
-// MÓDULO: COFRE DA KUROMI E RESET (GLOBAL)
+// COFRE E RESET (GLOBAL)
 // ==========================================
 function inicializarCofre() {
     const btnExportar = document.getElementById('btn-exportar');
@@ -90,7 +89,7 @@ function inicializarCofre() {
                         window.location.reload();
                     }
                 } catch (erro) {
-                    alert("Erro ao ler o arquivo. Verifique se é um backup válido da Kuromi.");
+                    alert("Erro ao ler o arquivo. Verifique se é um backup válido da Kuromi (arquivo JSON).");
                 }
             };
             leitor.readAsText(arquivo);
@@ -99,7 +98,7 @@ function inicializarCofre() {
 
     if (btnResetMaster) {
         btnResetMaster.addEventListener('click', () => {
-            if (confirm("🚨 ATENÇÃO! Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
+            if (confirm("Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
                 localStorage.clear();
                 alert("Tudo foi apagado. A Kuromi varreu a casa! O site será recarregado do zero. 🧹✨");
                 window.location.reload();
@@ -108,9 +107,9 @@ function inicializarCofre() {
     }
 }
 
-// ==========================================
-// MÓDULO: RASTREADOR DE HUMOR (GLOBAL)
-// ==========================================
+// =============================
+// RASTREADOR DE HUMOR (GLOBAL)
+// =============================
 function inicializarHumor() {
     let humorAtual = localStorage.getItem('kuromi_humor') || 'feliz';
     const botoesHumor = document.querySelectorAll('.btn-humor');
@@ -121,7 +120,7 @@ function inicializarHumor() {
             if(btn.dataset.humor === humorAtual) btn.classList.add('ativo');
         });
         
-        // Se a função de atualizar a Kuromi interativa existir (apenas no index.html), nós a chamamos
+        // if (função de atualizar a Kuromi interativa) exists (apenas no index.html) then nós a chamamos
         if (typeof atualizarKuromi === 'function') {
             atualizarKuromi();
         }
@@ -139,53 +138,51 @@ function inicializarHumor() {
 }
 
 // --- INICIALIZAÇÃO IMEDIATA ---
-// Como este arquivo é chamado no final do <body>, não precisamos esperar o DOMContentLoaded
+// este arquivo é chamado no final do <body>, não precisamos esperar o DOMContentLoaded
 aplicarTema();
 inicializarAvatar();
 inicializarCofre(); 
 inicializarHumor(); 
 inicializarNomeUsuario();
-precarregarImagens(); // Chama o download fantasma das imagens!
+precarregarImagens(); // carrega imagens sem precisar estar num local com elas
 
-// ==========================================
-// MÓDULO: NOME DE USUÁRIO EDITÁVEL
-// ==========================================
+// ================================
+// NOME DE USUÁRIO EDITÁVEL
+// ================================
 function inicializarNomeUsuario() {
     const spanNome = document.getElementById('nome-usuario');
     
     if (spanNome) {
-        // 1. Tenta buscar o nome salvo no cofre (localStorage)
+        // try: busca o nome se existe
         const nomeSalvo = localStorage.getItem('kuromi_nome');
         
-        // 2. Se existir, escreve o nome salvo. Se não, deixa apenas o nome. 
-        // Nota: O HTML já começa com "Oie, Kuromi! 💜" como fallback padrão.
+        // se existe, escreve o nome salvo, se não, vai pro fallback
         if (nomeSalvo) {
             spanNome.textContent = `Oie, ${nomeSalvo}! 💜`;
         }
 
-        // 3. Adiciona o evento de clique para permitir a edição
+        // adiciona event que possibilita trocar de nome
         spanNome.addEventListener('click', () => {
-            // Abre uma caixinha de pergunta (prompt)
-            // Se já tiver nome salvo, ele aparece preenchido. Se não, fica em branco.
+            // se já tem nome, aparece, se não fica vazio (no quadrante)
             const novoNome = prompt("Qual é o seu nome? 💜", nomeSalvo || "");
             
-            // Verifica se a pessoa digitou algo e não clicou em "Cancelar"
+            // verificação de entrada válida
             if (novoNome !== null && novoNome.trim() !== "") {
-                const nomeLimpo = novoNome.trim(); // Tira espaços em branco extras
-                localStorage.setItem('kuromi_nome', nomeLimpo); // Salva no cofre
-                spanNome.textContent = `Oie, ${nomeLimpo}! 💜`; // Atualiza na tela na hora
+                const nomeLimpo = novoNome.trim(); // TRIM
+                localStorage.setItem('kuromi_nome', nomeLimpo); // salva no STORAGE
+                spanNome.textContent = `Oie, ${nomeLimpo}! 💜`; // update
             }
         });
 
-        // Efeito visual fofo ao passar o mouse
+        // efeito visual
         spanNome.addEventListener('mouseenter', () => spanNome.style.opacity = '0.7');
         spanNome.addEventListener('mouseleave', () => spanNome.style.opacity = '1');
     }
 }
 
-// ==========================================
-// MÓDULO: PRÉ-CARREGAMENTO DE IMAGENS
-// ==========================================
+// ===================================
+// PRÉ-CARREGAMENTO DE IMAGENS (evita FOUC)
+// ===================================
 function precarregarImagens() {
     const imagens = [
         'imgs/kuromi_bleh.png',
@@ -196,11 +193,11 @@ function precarregarImagens() {
         'imgs/Kuromi_yell.png',
         'imgs/Kuromi_walking.png',
         'imgs/sus.png',
-        'imgs/night1.jpg', // Garante que o fundo escuro carregue rápido
+        'imgs/night1.jpg', // fundo escuro carrega rápido
         'imgs/hellokitty-read.png'
     ];
     
-    // O navegador baixa a imagem na memória (cache) em segundo plano
+    // navegador baixa a imagem no cache (segundo plano)
     imagens.forEach(src => {
         const img = new Image();
         img.src = src;

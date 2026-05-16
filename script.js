@@ -1,4 +1,4 @@
-// 1. Inicialização e Variáveis Globais (Áudio no topo para evitar erros de leitura)
+// Inicialização e Variáveis Globais (Áudio no topo para evitar erros de leitura)
 const somGrab = new Audio('sounds/grab.mp3');
 const somSnap = new Audio('sounds/snap.mp3');
 
@@ -44,7 +44,7 @@ let instanciaSortableLembrete = null;
 let humorAtual = localStorage.getItem('kuromi_humor') || 'feliz';
 const botoesHumor = document.querySelectorAll('.btn-humor');
 
-// 2. Funções de Data
+// Funções de Data
 function ehDestaSemana(dataString) {
     const hoje = new Date();
     const dataTarefa = new Date(dataString + 'T00:00:00');
@@ -69,7 +69,7 @@ function formatarDataComDia(dataString) {
     return `${diaAbreviado}, ${dataFormatada}`;
 }
 
-// 3. Lógica de Alternância de Visão
+// Lógica de Alternância de Visão
 botoesView.forEach(botao => {
     botao.addEventListener('click', (e) => {
         botoesView.forEach(b => b.classList.remove('ativo'));
@@ -93,7 +93,7 @@ botoesView.forEach(botao => {
 function agruparPorMes(listaTarefas) {
     const grupos = {};
     listaTarefas.forEach(t => {
-        // Se a tarefa não tiver data, ela vai para a nossa nova categoria especial
+        // tarefa sem data => agrupamento especial (sem data)
         if (!t.data) {
             if (!grupos['Tarefas sem prazo definido']) grupos['Tarefas sem prazo definido'] = [];
             grupos['Tarefas sem prazo definido'].push(t);
@@ -109,7 +109,7 @@ function agruparPorMes(listaTarefas) {
     return grupos;
 }
 
-// 4. Efeitos Visuais
+// VSFX
 function criarPurpurina(x, y) {
     const cores = ['#D5C6E0', '#FAD4D8', '#FFFFFF', '#4A3B52'];
     for (let i = 0; i < 12; i++) {
@@ -130,21 +130,21 @@ function criarPurpurina(x, y) {
     }
 }
 
-// 5. Motor de Renderização
+// função de renderização principal
 function renderizarTarefas(animarOrdem = false) {
     containerTarefas.innerHTML = '';
     
-    // Destrói APENAS os motores das tarefas
+    // destrói APENAS motores das tarefas
     instanciasSortableTarefas.forEach(s => s.destroy());
     instanciasSortableTarefas = [];
 
     let tarefasParaExibir = [];
     
-    // --- PASSO 1: POPULAR O ARRAY COM AS TAREFAS CORRETAS ---
+    // --- POPULAR O ARRAY COM AS TAREFAS CORRETAS ---
     if (visualizacaoAtual === 'todas') {
-        tarefasParaExibir = [...tarefas]; // Copia todas as tarefas
+        tarefasParaExibir = [...tarefas]; // copia todas as tarefas
     } else if (visualizacaoAtual === 'semana') {
-        // Pega as tarefas que têm data E que pertencem a esta semana
+        // pega as tarefas com data && que pertencem a esta semana
         tarefasParaExibir = tarefas.filter(t => t.data && ehDestaSemana(t.data));
     } else if (visualizacaoAtual === 'dia') {
         const dataDeHoje = new Date();
@@ -153,7 +153,7 @@ function renderizarTarefas(animarOrdem = false) {
         tarefasParaExibir = tarefas.filter(t => t.data === dataString);
     }
 
-    // --- PASSO 2: RENDERIZAR A TELA ---
+    // --- RENDERIZAR A TELA ---
     if (visualizacaoAtual === 'semana') {
         if (tarefasParaExibir.length === 0) {
             containerTarefas.innerHTML = `
@@ -262,12 +262,12 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
         const card = document.createElement('div');
         card.classList.add('card-tarefa');
 
-        // LÓGICA DE ATRASO: Verifica se tem data, não está concluída e é menor que hoje
+        // LÓGICA DE ATRASO (verifica se tem data, é incompleta, e é menor que hoje)
         let estaAtrasada = false;
         if (tarefa.data && !tarefa.concluida) {
             const dataTarefa = new Date(tarefa.data + 'T00:00:00');
             const hoje = new Date();
-            hoje.setHours(0,0,0,0); // Ignora as horas
+            hoje.setHours(0,0,0,0);
             if (dataTarefa < hoje) {
                 card.classList.add('atrasada');
                 estaAtrasada = true;
@@ -285,7 +285,7 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
             card.style.animationDelay = `${index * 0.08}s`; 
         }
 
-        // Se não tiver data, mostra o texto de Sem Prazo
+        // se não tiver data, mostra o texto de Sem Prazo
         const textoData = tarefa.data ? formatarDataComDia(tarefa.data) : 'Sem Prazo';
         const alertaAtraso = estaAtrasada ? '<span title="Atrasada!" style="margin-left: 5px;">⚠️</span>' : '';
 
@@ -304,8 +304,9 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
                 <span class="texto-detalhe" style="font-size: 1.1rem; flex-grow: 1;">${tarefa.detalhe}</span>
             </div>
         `;
-
-        // Evento: Marcar como Concluída
+        
+        // ------------------------- EVENTOS -------------------------
+        // mark as concluída
         const checkbox = card.querySelector('.checkbox-concluir');
         checkbox.addEventListener('change', () => {
             const tarefaGlobal = tarefas.find(t => t.id === tarefa.id);
@@ -314,7 +315,7 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
             renderizarTarefas(); 
         });
 
-        // Evento: Abrir modo Edição
+        // abrir modo edição
         card.querySelector('.btn-editar-tarefa').addEventListener('click', () => {
             const tarefaGlobal = tarefas.find(t => t.id === tarefa.id);
             if (tarefaGlobal) {
@@ -345,7 +346,7 @@ const formLembrete = document.getElementById('form-lembrete');
 function renderizarLembretes() {
     containerLembretes.innerHTML = '';
 
-    // Se já existia um motor de arrasto, limpe-o antes de recriar
+    // se já existia um motor de arrasto, limpar antes de recriar
     if (instanciaSortableLembrete) {
         instanciaSortableLembrete.destroy();
         instanciaSortableLembrete = null;
@@ -370,12 +371,10 @@ function renderizarLembretes() {
 
         containerLembretes.appendChild(gridLembretes);
         
-        // Regista isoladamente o motor de física dos lembretes
         instanciaSortableLembrete = ativarSortable(gridLembretes, true); 
     }
 }
 
-// 6. Motor Sortable Blindado
 function ativarSortable(elementoContainer, ehLembrete = false) {
     const sortable = new Sortable(elementoContainer, {
         animation: 250,
@@ -437,10 +436,10 @@ function ativarSortable(elementoContainer, ehLembrete = false) {
         }
     });
     
-    return sortable; // NOVO: Devolve o motor para a função que o chamou poder guardá-lo
+    return sortable; 
 }
 
-// 5. Eventos do Modal de Lembrete
+// eventos modal de lembrete
 btnNovoLembrete.addEventListener('click', () => modalLembrete.classList.remove('oculto'));
 btnCancelarLembrete.addEventListener('click', () => modalLembrete.classList.add('oculto'));
 
@@ -456,10 +455,10 @@ formLembrete.addEventListener('submit', (e) => {
     formLembrete.reset();
 });
 
-// Chame na inicialização
+// já chama na inicialização
 renderizarLembretes();
 
-// 7. Eventos de Botões e Modais
+// eventos botões e modais
 btnOrdenar.addEventListener('click', () => {
     if (somSnap) somSnap.play().catch(e => console.log('Áudio bloqueado'));
     tarefas.sort((a, b) => new Date(a.data) - new Date(b.data));
@@ -470,8 +469,8 @@ function abrirModal() { modalOverlay.classList.remove('oculto'); }
 function fecharModal() { 
     modalOverlay.classList.add('oculto'); 
     formTarefa.reset(); 
-    idEdicaoTarefa = null; // Limpa o ID de edição
-    document.querySelector('#modal-nova-tarefa h2').textContent = "Nova Tarefa"; // Reseta o título
+    idEdicaoTarefa = null; // limpa o ID de edição
+    document.querySelector('#modal-nova-tarefa h2').textContent = "Nova Tarefa"; // reseta título
 }
 
 btnAbrirModal.addEventListener('click', abrirModal);
@@ -482,9 +481,9 @@ formTarefa.addEventListener('submit', function(evento) {
     const selectMateria = document.getElementById('select-materia');
     const materia = selectMateria ? selectMateria.value : "Pessoal";
     const titulo = document.getElementById('input-titulo').value;
-    const data = document.getElementById('input-data').value; // Agora pode vir vazio
+    const data = document.getElementById('input-data').value; // agora é opcional (versão recente)
 
-    // 1. Validação de Segurança: Checa se a data informada já passou
+    // checka se data já passou (tarefa atrasada)
     if (data) {
         const dataEscolhida = new Date(data + 'T00:00:00');
         const hoje = new Date();
@@ -492,13 +491,13 @@ formTarefa.addEventListener('submit', function(evento) {
         
         if (dataEscolhida < hoje) {
             const confirmacao = confirm("Kuromi says: Hello! Essa data já passou. Vai mesmo colocar tarefa atrasada na minha frente? 🚨");
-            if (!confirmacao) return; // Se ela clicar em Cancelar, o código para aqui
+            if (!confirmacao) return; // se cancelar, caba aqui
         }
     }
 
-    // 2. Lógica de Salvar: É uma Edição ou uma Nova Tarefa?
+    // lógica salvar: edição ou nova tarefa?
     if (idEdicaoTarefa) {
-        // Encontra a tarefa existente e atualiza os dados
+        // encontra tarefa existente e atualiza
         const index = tarefas.findIndex(t => t.id === idEdicaoTarefa);
         if (index !== -1) {
             tarefas[index].disciplina = materia;
@@ -506,7 +505,7 @@ formTarefa.addEventListener('submit', function(evento) {
             tarefas[index].data = data;
         }
     } else {
-        // Cria uma nova tarefa do zero
+        // cria nova tarefa
         tarefas.push({
             id: Date.now(),
             disciplina: materia,
@@ -521,12 +520,12 @@ formTarefa.addEventListener('submit', function(evento) {
     fecharModal();
 });
 
-// Inicia a aplicação
+// incia aplicação
 renderizarTarefas();
 
-// ==========================================
-// MÓDULO POMODORO
-// ==========================================
+// ================
+// POMODORO
+// ================
 const TEMPO_PADRAO = 25 * 60; 
 let tempoRestante = TEMPO_PADRAO;
 let intervaloTimer = null;
@@ -620,72 +619,72 @@ function atualizarGraficoProgresso() {
     legenda.textContent = `${concluidas} de ${total} tarefas concluídas`;
 }
 
-// ==========================================
-// AÇÃO DE CLIQUE: ARQUIVO CONCLUÍDO (Limpeza em Massa)
-// ==========================================
+// ===================================================
+// AÇÃO DE CLIQUE: ARQUIVO CONCLUÍDO (Limpeza em Massa (MASSA?? AHHHHHHHHHH))
+// ====================================================
 const btnMenuArquivo = document.getElementById('menu-arquivo');
 
 btnMenuArquivo.addEventListener('click', () => {
-    // Verifica se existe alguma tarefa com o status concluida: true
+    // verfica se existe pelo menos uma tarefa concluída
     const tarefasConcluidas = tarefas.filter(t => t.concluida);
 
     if (tarefasConcluidas.length > 0) {
-        // Pede uma confirmação fofa
+        // confirmação (fofa eheheh)
         if (confirm(`A Kuromi encontrou ${tarefasConcluidas.length} tarefa(s) concluída(s). Deseja limpar todas elas do seu painel? 🧹💜`)) {
             
-            // Mantém no array apenas as tarefas que NÃO estão concluídas
+            // mantem tarefas não concluídas
             tarefas = tarefas.filter(t => !t.concluida);
             salvarTarefas();
             
-            // Efeitos sonoros e visuais no centro da tela
+            // VSFX
             if (somSnap) somSnap.play().catch(() => {});
             criarPurpurina(window.innerWidth / 2, window.innerHeight / 2);
             
-            // Redesenha a tela e atualiza o gráfico
+            // re-renderiza e atualiza gráfico de progresso
             renderizarTarefas();
             atualizarGraficoProgresso();
         }
     } else {
-        // Feedback visual se ela clicar sem ter nada concluído
+        // se não tem nada concluído ainda
         alert("Sua mesa já está limpinha! Nenhuma tarefa concluída para arquivar no momento. ✨");
     }
 });
 
-// ==========================================
-// MÓDULO: MODO FOCO E RÁDIO KUROMI
-// ==========================================
+// ==========================
+// MODO FOCO E RÁDIO KUROMI
+// ==========================
 const btnZen = document.getElementById('btn-zen');
 const containerRadio = document.getElementById('container-radio');
 const iframeRadio = document.getElementById('radio-kuromi');
 
-// O ID 'jfKfPfyJRdk' é a live 24/7 de Lofi Hip Hop
-// O '?autoplay=1' força o vídeo a começar sozinho quando o link é carregado
+// ID = jfKfPfyJRdk' = live 24/7 de lofi (hip hop) (MUDAR FUTURAMENTE A DEPENDER DO GOSTO)
+// autoplay ativado
 const linkRadioAoVivo = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1&disablekb=1&fs=0&modestbranding=1";
 
 if (btnZen) {
     btnZen.addEventListener('click', () => {
-        // 1. Alterna a classe que limpa o ecrã (Modo Zen)
+        // alterna classe que limpa a tela
         document.body.classList.toggle('zen-mode');
         const isZen = document.body.classList.contains('zen-mode');
         
         if (isZen) {
-            // 2. Entrando no Modo Foco
+            // entra no modo foco
             btnZen.innerHTML = "🔙 Sair do Foco";
             btnZen.style.backgroundColor = "var(--rosa-melody)";
             btnZen.style.color = "var(--roxo-kuromi-escuro)";
             
-            // Exibe o player e injeta o link para começar a música automaticamente
+            // exibe o player e injeta o link
             if (containerRadio) {
                 containerRadio.classList.remove('oculto');
                 iframeRadio.src = linkRadioAoVivo;
             }
         } else {
-            // 3. Saindo do Modo Foco
+            // sai do modo foco
             btnZen.innerHTML = "🧘 Modo Foco";
             btnZen.style.backgroundColor = ""; // Volta ao padrão do CSS
             btnZen.style.color = "";
             
-            // Esconde o player e "destrói" o link para a música parar imediatamente
+            // esconde player e destroi some com o link
             if (containerRadio) {
                 containerRadio.classList.add('oculto');
                 iframeRadio.src = "";
@@ -700,32 +699,32 @@ if (btnZen) {
 const btnResetMaster = document.getElementById('btn-reset-master');
 if (btnResetMaster) {
     btnResetMaster.addEventListener('click', () => {
-        if (confirm("🚨 ATENÇÃO! Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
-            // Limpa o banco de dados inteiro do navegador
+        if (confirm("Isso vai apagar TODAS as suas tarefas, matérias, notas e leituras para sempre.\n\nTem certeza?")) {
+            // limpa o banco de dados inteiro do navegador
             localStorage.clear();
             alert("Tudo foi apagado. A Kuromi varreu a casa! O site será recarregado do zero. 🧹✨");
-            // Recarrega a página para voltar ao estado de fábrica
+            // recarrega a página para voltar ao "estado de fábrica"
             window.location.reload();
         }
     });
 }
 
-// ==========================================
-// MÓDULO: RASTREADOR DE HUMOR E KUROMI INTERATIVA
-// ==========================================
+// ===============================================
+// RASTREADOR HUMOR TRACKER && KUROMI INTERATIVA
+// ===============================================
 
 function atualizarKuromi() {
     const imgKuromi = document.getElementById('kuromi-interativa-img');
     imgKuromi.classList.remove('kuromi-sleep-img');
     const falaKuromi = document.getElementById('kuromi-interativa-fala');
     
-    if (!imgKuromi || !falaKuromi) return; // Só tenta atualizar se a visão do 'Dia' estiver aberta
+    if (!imgKuromi || !falaKuromi) return; // só tenta atualizar se a visão do 'Dia' estiver aberta
     
     const hora = new Date().getHours();
     let imagem = 'imgs/kuromi_bleh.png'; 
     let mensagem = '';
 
-    // Lógica Dinâmica baseada no Humor e na Hora
+    // frase + foto baseada no humor & horário
     if (humorAtual === 'estressada') {
         imagem = 'imgs/moosic.png'; 
         mensagem = "Respira fundo, Lara! Que tal ligar o Modo Foco e colocar a nossa Rádio Lofi para tocar? 🎧";
@@ -737,7 +736,7 @@ function atualizarKuromi() {
         imagem = 'imgs/kuromi_skate.png';
         mensagem = "Olhar de predadora! Vamos gabaritar essas tarefas e dominar o mundo. 🎯";
     } else {
-        // Se estiver "Feliz" (ou por padrão), reage à hora do dia
+        // if happy, então muda conforme horário
         if (hora >= 6 && hora < 12) {
             mensagem = "Bom dia, flor do dia! O café já está pronto? Vamos conquistar o mundo hoje! ☕";
         } else if (hora >= 12 && hora < 18) {
@@ -746,7 +745,7 @@ function atualizarKuromi() {
             mensagem = "Boa noite! Tá quase na hora de descansar diva 💅";
         } else {
             mensagem = "Lara, vai dormir! A faculdade não vale as suas olheiras. Desliga isso agora! 🦉";
-            imagem = 'imgs/hellokittyknife.png'; // Kuromi dando bronca
+            imagem = 'imgs/hellokittyknife.png'; // bronca
         }
     }
 
@@ -759,7 +758,7 @@ function renderizarHumor() {
         btn.classList.remove('ativo');
         if(btn.dataset.humor === humorAtual) btn.classList.add('ativo');
     });
-    atualizarKuromi(); // Atualiza a fala da Kuromi na hora
+    atualizarKuromi(); // update fala da Kuromi na hora
 }
 
 botoesHumor.forEach(btn => {
@@ -770,5 +769,4 @@ botoesHumor.forEach(btn => {
     });
 });
 
-// Inicializa
 renderizarHumor();

@@ -67,7 +67,7 @@ a, button, .menu-navegacao li {
     gap: 30px;
     width: 100%;
     max-width: 1400px;
-    min-height: 90vh; /* Mude de 'height' para 'min-height' */
+    min-height: 90vh; 
     align-items: start; /* IMPORTANTE: Garante que as colunas não estiquem, permitindo o sticky funcionar */
 }
 
@@ -254,13 +254,12 @@ a, button, .menu-navegacao li {
 /* Classe Mestra para Colagens/Adesivos em qualquer lugar do site */
 .adesivo {
     position: absolute;
-    pointer-events: none; /* Crucial: garante que o adesivo não bloqueie cliques do mouse nos botões abaixo dele */
+    pointer-events: none; /* IMPORTANTE: garante que o adesivo não bloqueie cliques do mouse nos botões abaixo dele */
     filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
     z-index: 10; /* Garante que fique por cima da caixa */
 }
 
-/* Regra de Ouro para as Caixas Base */
-/* Qualquer caixa que for receber um adesivo PRECISA ter essas duas propriedades: */
+/* TODA caixa que for receber um adesivo PRECISA ter essas duas propriedades: */
 .caixa-com-adesivo {
     position: relative;
     overflow: visible !important;
@@ -403,7 +402,7 @@ label {
     100% { transform: rotate(0deg); }
 }
 
-/* Partícula de Purpurina */
+/* Partícula de Purpurina (PURPURINAAAAAAA YAYYYYYYYYY)*/
 .particula {
     position: fixed;
     pointer-events: none;
@@ -429,10 +428,10 @@ body.arrastando-ativo * {
     transform: scale(1.05) rotate(-2deg);
     box-shadow: 0 20px 40px rgba(74, 59, 82, 0.2) !important;
     cursor: url('imgs/grabbing.png') 16 16, grabbing !important;
-    transition: none !important; /* ADICIONADO: Força o CSS a não interferir no JavaScript */
+    transition: none !important;
 }
 
-/* O "buraco" ou espaço vazio onde o card vai encaixar (efeito ímã) */
+/* O "buraco" ou espaço vazio onde o card vai encaixar (efeito ímã??) */
 .sortable-ghost {
     opacity: 0.3;
     background-color: var(--roxo-kuromi-suave);
@@ -525,7 +524,6 @@ body.arrastando-ativo #menu-arquivo {
     background-color: var(--fundo-principal); /* Cria uma "caixa" visual para as avaliações */
     border-radius: 12px;
     padding: 15px;
-    /* Aumentamos a altura máxima para caberem muito mais notas sem scroll */
     max-height: 280px; 
 }
 
@@ -560,7 +558,7 @@ body.arrastando-ativo #menu-arquivo {
     transform: scale(1.1);
 }
 
-/* Os marcadores visuais tateis para as faltas */
+/* marcadores visuais tateis para as faltas */
 .trilha-faltas {
     display: flex;
     flex-wrap: wrap;
@@ -570,7 +568,7 @@ body.arrastando-ativo #menu-arquivo {
 .falta-vazia, .falta-marcada {
     width: 20px;
     height: 20px;
-    border-radius: 6px; /* Um quadrado levemente arredondado */
+    border-radius: 6px; /* quadrado levemente arredondado (next apple UI designer??????)*/
 }
 
 .falta-vazia {
@@ -580,8 +578,8 @@ body.arrastando-ativo #menu-arquivo {
 
 .falta-marcada {
     background-color: var(--roxo-kuromi-escuro);
-    /* Opcional: Se você tiver um ícone pequeno da Kuromi (ex: 16x16), pode colocá-lo aqui 
-       background-image: url('imgs/mini-caveira.png');
+    /* FUTURO: ícone pequeno da Kuromi 16x16
+       background-image: url('imgs/mini-algo.png');
        background-size: cover; */
 }
 
@@ -791,7 +789,7 @@ select {
 
 /* Estilo e animação da imagem da Kuromi no cabeçalho do Dia */
 .imagem-header-dia {
-    width: 120px; /* Ajuste o tamanho conforme a sua imagem */
+    width: 120px; /* ajusta tamanho conforme imagem */
     margin: 20px auto 0;
     display: block;
     animation: flutuar 3s ease-in-out infinite;
@@ -819,7 +817,6 @@ select {
     font-size: 0.9rem;
     border: 1px solid var(--roxo-kuromi-suave);
     cursor: url('imgs/grab.png') 16 16, grab;
-    /* REMOVIDO o 'transition: transform' para não brigar com a física do arrasto */
 }
 
 .item-lembrete:active {
@@ -1020,7 +1017,7 @@ select {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    /* O segredo: o gradiente usa uma variável CSS --p para a porcentagem */
+    /*  gradiente usa --p para a porcentagem */
     background: conic-gradient(
         var(--roxo-kuromi-escuro) calc(var(--p) * 1%), 
         var(--roxo-kuromi-suave) 0
@@ -1028,10 +1025,10 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: --p 0.5s ease; /* Animação suave da transição */
+    transition: --p 0.5s ease;
 }
 
-/* Criando o "buraco" no meio para virar uma rosca */
+/* "buraco" no meio para virar uma rosca (ih la ele)*/
 .miolo-grafico {
     width: 110px;
     height: 110px;
@@ -1056,9 +1053,9 @@ select {
     initial-value: 0;
 }
 
-/* Ajuste as configurações para ficarem junto do menu */
+/* configurações ficam junto do menu */
 .configuracoes-sidebar {
-    margin-top: 20px; /* Substitua o 'margin-top: auto;' por 20px */
+    margin-top: 20px;
     padding-bottom: 10px;
 }
 
@@ -1092,12 +1089,12 @@ select {
 }
 
 body.dark-mode {
-    /* As variáveis de cor que você gostou */
-    --fundo-principal: #1A161D; /* O roxo quase preto que define o fundo */
+    /* PALETA DE COR */
+    --fundo-principal: #1A161D; /* roxo quase preto (fundo) */
     --roxo-kuromi-suave: #3A2E42; 
     --roxo-kuromi-escuro: #E0D5E8; 
     --rosa-melody: #4D3338; 
-    --branco-puro: #2D2433; /* O tom escuro usado nos modais */
+    --branco-puro: #2D2433; /* tom escuro usado nos modais */
     --sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.4);
 
     background-image: url('imgs/night1.jpg');
@@ -1112,7 +1109,7 @@ body.dark-mode .modal-conteudo {
     box-shadow: var(--sombra-suave);
 }
 
-/* 3. Ajuste de contraste para os inputs dentro do modal escuro */
+/* Ajuste de contraste para os inputs dentro do modal escuro */
 body.dark-mode .grupo-input input,
 body.dark-mode .grupo-input select {
     background-color: rgba(255, 255, 255, 0.05); /* Leve fundo transparente */
@@ -1120,7 +1117,7 @@ body.dark-mode .grupo-input select {
     border-color: var(--roxo-kuromi-suave);
 }
 
-/* 4. Ajuste dos botões de ação do modal (Save/Cancel) */
+/* Ajuste dos botões de ação do modal (Save/Cancel) */
 body.dark-mode .botoes-modal .botao-primario {
     color: var(--roxo-kuromi-escuro);
 }
@@ -1176,7 +1173,7 @@ body.zen-mode .painel-widgets {
     position: sticky;
     top: 20px; /* Quando faltar 20px pro topo da tela, ela gruda */
     max-height: calc(100vh - 40px); /* Garante que a barra não vaze da tela */
-    overflow-y: auto; /* Se a tela for muito pequena, cria uma barra de rolagem fofa só pra ela */
+    overflow-y: auto; /* Se a tela for muito pequena, cria uma barra de rolagem (fofa hehe) só pra ela */
 }
 
 /* Oculte a barra de rolagem da sidebar para manter a estética clean */
@@ -1334,7 +1331,7 @@ body.dark-mode .card-tarefa.atrasada {
 .estado-vazio img {
     width: 130px;
     margin-bottom: 20px;
-    animation: flutuar 3s ease-in-out infinite; /* Usa a mesma animação fofa que já criamos! */
+    animation: flutuar 3s ease-in-out infinite; /* Usa a mesma animação fofa (ihul DRY) */
     filter: drop-shadow(0 10px 10px rgba(74, 59, 82, 0.15));
 }
 
