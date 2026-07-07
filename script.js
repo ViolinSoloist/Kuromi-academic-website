@@ -659,7 +659,7 @@ const iframeRadio = document.getElementById('radio-kuromi');
 
 // ID = jfKfPfyJRdk' = live 24/7 de lofi (hip hop) (MUDAR FUTURAMENTE A DEPENDER DO GOSTO)
 // autoplay ativado
-const linkRadioAoVivo = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1&disablekb=1&fs=0&modestbranding=1";
+const linkRadioAoVivo = "https://www.youtube.com/embed/X4VbdwhkE10?autoplay=1&controls=1&disablekb=1&fs=0&modestbranding=1";
 
 if (btnZen) {
     btnZen.addEventListener('click', () => {
