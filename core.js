@@ -138,7 +138,7 @@ function inicializarHumor() {
 }
 
 // --- INICIALIZAÇÃO IMEDIATA ---
-// este arquivo é chamado no final do <body>, não precisamos esperar o DOMContentLoaded
+// este arquivo é chamado no final do <body>, portanto não é necessário esperar o DOMContentLoaded
 aplicarTema();
 inicializarAvatar();
 inicializarCofre(); 
@@ -158,7 +158,7 @@ function inicializarNomeUsuario() {
         
         // se existe, escreve o nome salvo, se não, vai pro fallback
         if (nomeSalvo) {
-            spanNome.textContent = `Oie, ${nomeSalvo}! 💜`;
+            spanNome.innerHTML = `Oie, ${nomeSalvo}! <i class="fa-solid fa-cat" style="color: var(--roxo-kuromi-escuro)"></i>`;
         }
 
         // adiciona event que possibilita trocar de nome
@@ -170,7 +170,7 @@ function inicializarNomeUsuario() {
             if (novoNome !== null && novoNome.trim() !== "") {
                 const nomeLimpo = novoNome.trim(); // TRIM
                 localStorage.setItem('kuromi_nome', nomeLimpo); // salva no STORAGE
-                spanNome.textContent = `Oie, ${nomeLimpo}! 💜`; // update
+                spanNome.innerHTML = `Oie, ${nomeLimpo}! <i class="fa-solid fa-cat" style="color: var(--roxo-kuromi-escuro)"></i>`; // update
             }
         });
 

@@ -1348,13 +1348,13 @@ body.dark-mode .card-tarefa.atrasada {
 .switch-tema {
     position: relative;
     display: inline-block;
-    width: 52px;
-    height: 28px;
+    width: 60px;
+    height: 30px;
     margin-left: 10px;
     vertical-align: middle;
 }
 
-/* Esconde o checkbox real do navegador */
+/* esconder checkbox do navegador */
 .switch-tema input {
     opacity: 0;
     width: 0;
@@ -1365,42 +1365,55 @@ body.dark-mode .card-tarefa.atrasada {
 .slider-tema {
     position: absolute;
     cursor: url('imgs/kuromi-pointer.png') 0 0, pointer;
-    top: 0;
+    top: 20px;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: -20px;
     background-color: var(--roxo-kuromi-suave);
     transition: 0.4s;
-    border-radius: 34px;
-    border: 2px solid var(--roxo-kuromi-escuro);
+    border-radius: 40px;
+    border: 1.5px solid var(--roxo-kuromi-escuro);
 }
 
-/* A "bolinha" que desliza */
+/* toggle ball */
 .slider-tema:before {
     position: absolute;
-    content: "☀️";
-    font-size: 12px;
+
+    /*API de ícones*/
+    content: "\f0eb";
+    font-family: "Font Awesome 6 Free"; 
+    font-weight: 900; 
+
+    /*estilização*/
+    font-size: 16px;
+    color: #f39c12;
+
+    /*posicionamento*/
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 20px;
-    width: 20px;
-    left: 2px;
-    bottom: 2px;
+    height: 22px;
+    width: 22px;
+    left: 5px;
+    bottom: 2.5px;
     background-color: var(--branco-puro);
     transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Quando o checkbox estiver marcado (Modo Escuro) */
+/* modo escuro ligado (check box marcado) */
 input:checked + .slider-tema {
     background-color: var(--roxo-kuromi-escuro);
 }
 
-/* Move a bolinha para a direita e muda o ícone */
+/* translada bolinha à direita e muda o ícone */
 input:checked + .slider-tema:before {
     transform: translateX(24px);
-    content: "🌙";
+    
+    /*API de ícones*/
+    content: "\f0eb"; 
+    color: var(--roxo-kuromi-escuro); 
+
     background-color: var(--fundo-principal);
 }

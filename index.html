@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Acadêmico - Kuromi Edition</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <script>
@@ -27,7 +28,9 @@
                     <input type="file" id="input-avatar" accept="image/*" style="display: none;">
                 </div>
                 <h2>
-                    <span id="nome-usuario" title="Clique para editar seu nome" style="cursor: url('imgs/kuromi-pointer.png') 0 0, pointer; transition: opacity 0.2s;">Oie, Kuromi! 💜</span>
+                    <span id="nome-usuario" title="Clique para editar seu nome" style="cursor: url('imgs/kuromi-pointer.png') 0 0, pointer; transition: opacity 0.2s;">
+                        Oie, Kuromi! <i class="fa-solid fa-cat" style="color: var(--roxo-kuromi-escuro)"></i>
+                    </span>
                     
                     <label class="switch-tema" title="Alternar Modo Escuro">
                         <input type="checkbox" id="toggle-dark-checkbox">
@@ -49,9 +52,11 @@
                 <hr style="opacity: 0.2; margin: 20px 0;">
                 
                 <div class="botoes-backup">
-                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
-                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
-                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">☠️ Reset</button>
+                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup"><i class="fa-solid fa-download"></i> Exportar</button>
+                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup"><i class="fa-solid fa-upload"></i> Importar</button>
+                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">
+                        <i class="fa-solid fa-trash" style="color: #d84b6b;"></i> Clear
+                    </button>
                     <input type="file" id="input-importar" style="display: none;" accept=".json">
                 </div>
 
@@ -74,7 +79,7 @@
             <header class="cabecalho-principal">
                 <div class="titulo-com-botao">
                     <div>
-                        <h1><span id="texto-visao">Visão Geral do Dia</span> 💜</h1>
+                        <h1><span id="texto-visao">Visão Geral do Dia  </span> <i class="fa-solid fa-calendar-day" style="color: var(--roxo-kuromi-escuro);"></i></h1>
                         <p>Organize suas tarefas com a Kuromi</p>
                     </div>
                     
@@ -116,16 +121,16 @@
                 <img src="imgs/Kuromi-top2.png" class="adesivo" style="top: -30px; right: -10px; width: 55px;">
                 
                 <div class="info-titulo" style="justify-content: center; margin-bottom: 10px;">
-                    <h3>Foco Kuromi 🍅</h3>
+                    <h3>Foco Kuromi <i class="fa-solid fa-hourglass-half"></i></h3>
                 </div>
                 
                 <div class="timer" id="display-pomodoro">25:00</div>
                 
                 <div class="controles-pomodoro">
-                    <button id="btn-pomodoro-play" class="btn-pomodoro">▶️ Play</button>
-                    <button id="btn-pomodoro-pause" class="btn-pomodoro oculto">⏸️ Pause</button>
-                    <button id="btn-pomodoro-reset" class="btn-pomodoro">🔄 Reset</button>
-                    <button id="btn-zen" class="btn-pomodoro">🧘 Modo Foco</button>
+                    <button id="btn-pomodoro-play" class="btn-pomodoro"><i class="fa-solid fa-circle-play"></i> Play</button>
+                    <button id="btn-pomodoro-pause" class="btn-pomodoro oculto"><i class="fa-solid fa-stop"></i> Pause</button>
+                    <button id="btn-pomodoro-reset" class="btn-pomodoro"><i class="fa-solid fa-backward-step"></i> Reset</button>
+                    <button id="btn-zen" class="btn-pomodoro"><i class="fa-solid fa-radio"></i> Foco</button>
                 </div>
 
                 <div id="container-radio" class="oculto" style="margin-top: 15px; border-radius: 12px; overflow: hidden; border: 2px solid var(--roxo-kuromi-suave);">

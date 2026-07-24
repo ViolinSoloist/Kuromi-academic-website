@@ -296,7 +296,9 @@ function preencherGrid(elementoGrid, lista, animarOrdem, isDiaView = false) {
                     <span style="font-size: 0.75rem; background: var(--fundo-principal); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--roxo-kuromi-suave);">
                         ${textoData} ${alertaAtraso}
                     </span>
-                    <button class="btn-editar-tarefa" title="Editar Tarefa">✏️</button>
+                    <button class="btn-editar-tarefa" title="Editar Tarefa">
+                        <i class="fa-solid fa-pen" style="color: var(--roxo-kuromi-escuro);"></i>
+                    </button>
                 </div>
             </div>
             <div style="display: flex; align-items: center;">
@@ -669,7 +671,7 @@ if (btnZen) {
         
         if (isZen) {
             // entra no modo foco
-            btnZen.innerHTML = "🔙 Sair do Foco";
+            btnZen.innerHTML = `<i class="fa-solid fa-backward"></i> Sair`;
             btnZen.style.backgroundColor = "var(--rosa-melody)";
             btnZen.style.color = "var(--roxo-kuromi-escuro)";
             
@@ -680,7 +682,7 @@ if (btnZen) {
             }
         } else {
             // sai do modo foco
-            btnZen.innerHTML = "🧘 Modo Foco";
+            btnZen.innerHTML = `<i class="fa-solid fa-radio"></i> Foco`;
             btnZen.style.backgroundColor = ""; // Volta ao padrão do CSS
             btnZen.style.color = "";
             

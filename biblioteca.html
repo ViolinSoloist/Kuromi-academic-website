@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca - Kuromi Edition</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <script>
@@ -48,9 +49,11 @@
                 <hr style="opacity: 0.2; margin: 20px 0;">
                 
                 <div class="botoes-backup">
-                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup">💾 Exportar</button>
-                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup">📂 Importar</button>
-                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">☠️ Reset</button>
+                    <button id="btn-exportar" class="btn-config" title="Salvar arquivo de backup"><i class="fa-solid fa-download"></i> Exportar</button>
+                    <button id="btn-importar-trigger" class="btn-config" title="Carregar arquivo de backup"><i class="fa-solid fa-upload"></i> Importar</button>
+                    <button id="btn-reset-master" class="btn-config" style="color: #d84b6b;" title="Apagar tudo do site">
+                        <i class="fa-solid fa-trash" style="color: #d84b6b;"></i> Clear
+                    </button>
                     <input type="file" id="input-importar" style="display: none;" accept=".json">
                 </div>
 
@@ -73,7 +76,7 @@
             <header class="cabecalho-principal">
                 <div class="titulo-com-botao">
                     <div>
-                        <h1>Sua Biblioteca 📖</h1>
+                        <h1>Sua Biblioteca <i class="fa-solid fa-book"></i></h1>
                         <p>Controle os seus PDFs, artigos e livros.</p>
                     </div>
                     <button id="btn-nova-leitura" class="botao-icon" title="Adicionar Leitura">+</button>
@@ -86,7 +89,7 @@
 
         <aside class="painel-widgets">
             <div class="widget caixa-com-adesivo">
-                <h3 style="margin-bottom: 10px;">Buscar 🔎</h3>
+                <h3 style="margin-bottom: 10px;">Buscar <i class="fa-solid fa-magnifying-glass"></i></h3>
                 <div class="grupo-input" style="margin-bottom: 0;">
                     <input type="text" id="input-busca" placeholder="Digite para filtrar..." style="width: 100%;">
                 </div>
