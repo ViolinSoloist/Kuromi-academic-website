@@ -659,8 +659,8 @@ const btnZen = document.getElementById('btn-zen');
 const containerRadio = document.getElementById('container-radio');
 const iframeRadio = document.getElementById('radio-kuromi');
 
-// ID = jfKfPfyJRdk' = live 24/7 de lofi (hip hop) (MUDAR FUTURAMENTE A DEPENDER DO GOSTO)
-// autoplay ativado
+// ID = jfKfPfyJRdk' = live 24/7 de lofi
+/// @attention CHECAR LINK REGULARMENTE, A LIVE PODE FECHAR
 const linkRadioAoVivo = "https://www.youtube.com/embed/X4VbdwhkE10?autoplay=1&controls=1&disablekb=1&fs=0&modestbranding=1";
 
 if (btnZen) {

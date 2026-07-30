@@ -167,9 +167,12 @@
         </div>
     </div>
     
+
+    <!-- Modal forms de nova tarefa -->
     <div id="modal-nova-tarefa" class="modal-overlay oculto">
         <div class="modal-conteudo caixa-com-adesivo">
             
+            <!-- ADESIVOS -->
             <img src="imgs/Kuromi-rightPeek.png" class="adesivo" 
                 style="top: 100px; right: -81px; width: 80px;">
                 
@@ -179,6 +182,8 @@
             <img src="imgs/Kuromi_walking.png" class="adesivo" 
                 style="bottom: -20px; right: 370px; width: 60px; transform: rotate(-15deg);">
 
+            
+            <!-- CONTEÚDO DO MODAL -->
             <h2>Nova Tarefa</h2>
             <form id="form-tarefa">
                 <div class="grupo-input">
@@ -193,13 +198,17 @@
                 </div>
                 <div class="grupo-input">
                     <label for="input-data">Prazo ou Data (Opcional)</label>
-                    <input type="date" id="input-data">
+                    <div id="input-data-hora">
+                        <input type="date" id="input-data">
+                        <input type="time" id="input-horario">
+                    </div>
                 </div>
                 <div class="botoes-modal">
                     <button type="button" id="btn-cancelar-modal" class="botao-secundario">Cancelar</button>
                     <button type="submit" class="botao-primario">Salvar 💜</button>
                 </div>
             </form>
+
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
