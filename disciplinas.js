@@ -137,7 +137,7 @@ function renderizarDisciplinas() {
                 <h2>${disc.nome}</h2>
                 <div style="display: flex; gap: 8px;">
                     <button class="botao-secundario-pequeno btn-editar">Editar</button>
-                    <button class="botao-secundario-pequeno btn-deletar" style="border-color: #ffb3ba;">Excluir</button>
+                    <button class="botao-secundario-pequeno btn-deletar" style="border-color: #ffb3ba;"><i class="fa-solid fa-trash-can" style="color: #ffb3ba;"></i></button>
                 </div>
             </div>
             
